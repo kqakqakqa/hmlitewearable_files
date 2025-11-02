@@ -18,7 +18,7 @@ export default {
     this.fileName = $app.getImports().paths.paths[$app.getImports().paths.paths.length - 1].split("/")[1];
     const fileExts = this.fileName.split(".");
     const fileExtsLen = fileExts.length;
-    const fileExt = fileExtsLen > 1 ? fileExts[fileExtsLen - 1].toLowerCase() : "";
+    const fileExt = fileExtsLen > 1 ? fileExts[fileExtsLen - 1].toLowerCase() : "bin";
     const fileSubExt = fileExtsLen > 2 ? fileExts[fileExtsLen - 2].toLowerCase() : "";
     const isSubExtImage = (
       fileSubExt === "bmp" ||

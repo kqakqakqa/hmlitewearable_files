@@ -1,13 +1,11 @@
 console.info("pages/viewer-dir/viewer-dir onInit");
 
 const maxFiles = 7;
-let position = 0;
 let fileCount = 0;
 
 export default {
   data: {
     uiSizes: $app.getImports().UiSizes,
-    paths: $app.getImports().paths.paths,
     path: "",
     files: [],
     failData: "",
@@ -15,30 +13,30 @@ export default {
     hasNext: false,
   },
   onInit() {
-
   },
   onReady() {
-    this.openPath();
+    this.openDir();
   },
   onDestroy() {
   },
   onGoParentClick() {
-    this.paths.push("\\..");
-    this.openPath();
+    $app.getImports().paths.paths.push("\\..");
+    this.clearPageData();
+    this.openDir();
   },
   onGoBackClick() {
-    if (this.paths.length > 0) {
-      this.paths.pop();
-      this.openPath();
+    if ($app.getImports().paths.paths.length > 0) {
+      $app.getImports().paths.paths.pop();
+      this.clearPageData();
+      this.openDir();
     }
   },
   onGoClick(uri) {
-    this.paths.push("/" + uri.split("/").slice(-1).join(""));
+    $app.getImports().paths.paths.push("/" + uri.split("/").slice(-1).join(""));
     this.openPath();
   },
   openPath() {
-    this.clearPageData();
-    this.path = this.paths.join("");
+    this.path = $app.getImports().paths.paths.join("");
     console.log("open path " + this.path);
     $app.getImports().file.get({
       uri: "internal://app" + this.path,
@@ -46,6 +44,7 @@ export default {
         console.log("path info: " + JSON.stringify(f))
         // dir
         if (f.type == "dir") {
+          this.clearPageData();
           return this.openDir();
         }
 
@@ -84,18 +83,19 @@ export default {
   openDir() {
     this.clearPathData();
     this.failData = "loading";
+    this.path = $app.getImports().paths.paths.join("");
     $app.getImports().file.list({
       uri: "internal://app" + this.path,
       success: d2 => {
         fileCount = d2.fileList.length;
-        for (let f = position; f < Math.min(position + maxFiles, fileCount); f++) {
+        for (let f = $app.getImports().paths.position; f < Math.min($app.getImports().paths.position + maxFiles, fileCount); f++) {
           this.files.push({
             uri: d2.fileList[f].uri.split("/").slice(-1).join(""),
             color: d2.fileList[f].type == 'dir' ? '#ffa' : '#aaf',
           });
         }
-        this.hasNext = position + maxFiles < fileCount;
-        this.hasPrev = position > 0;
+        this.hasNext = $app.getImports().paths.position + maxFiles < fileCount;
+        this.hasPrev = $app.getImports().paths.position > 0;
         this.failData = "";
       },
       fail: this.showFailData
@@ -107,7 +107,7 @@ export default {
     this.failData = "";
   },
   clearPageData() {
-    position = 0;
+    $app.getImports().paths.position = 0;
     fileCount = 0;
     this.hasPrev = false;
     this.hasNext = false;
@@ -118,11 +118,11 @@ export default {
     this.failData = code + " " + data + (code == 300 ? "\n(可能是空文件夹)" : "");
   },
   onPrevPageClick() {
-    position = Math.max(position - maxFiles, 0);
+    $app.getImports().paths.position = Math.max($app.getImports().paths.position - maxFiles, 0);
     this.openDir();
   },
   onNextPageClick() {
-    position = Math.min(position + maxFiles, fileCount);
+    $app.getImports().paths.position = Math.min($app.getImports().paths.position + maxFiles, fileCount);
     this.openDir();
   },
 }
