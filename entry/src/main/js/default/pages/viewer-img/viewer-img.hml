@@ -1,5 +1,6 @@
 <stack style="width: 1920px; height: 1920px;">
-  <image on:click="onImgClick" if="{{uiRefresh}}" src="/zhshi-file-img/{{imgCopyName}}" style="width: {{uiSizes.screenWidth * imgScale}}px; height: {{uiSizes.screenHeight * imgScale}}px; background-color: #333; object-fit: contain;"></image>
+  <!-- <image on:click="onImgClick" if="{{uiRefresh}}" src="/viewer-img/{{imgCopyName}}" style="width: {{uiSizes.screenWidth * imgScale}}px; height: {{uiSizes.screenHeight * imgScale}}px; background-color: #333; object-fit: contain;"></image> -->
+  <image on:click="onImgClick" src="/viewer-img/{{imgCopyName}}" style="width: {{uiSizes.screenWidth * imgScale}}px; height: {{uiSizes.screenHeight * imgScale}}px; background-color: #333; object-fit: contain;"></image>
 
   <div if="{{showTitle}}" on:click="nullFn" on:swipe="nullFn" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 96 + 2}}px; flex-direction: column; background-color: transparent;">
     <div on:click="onGoBackClick" on:swipe="nullFn" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; justify-content: center; align-items: center; background-color: #aa000000;">

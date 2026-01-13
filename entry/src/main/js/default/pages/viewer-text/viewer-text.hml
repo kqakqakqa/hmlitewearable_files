@@ -1,7 +1,7 @@
 <stack style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
   <!-- timeBatteryStr -->
   <div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; justify-content: center; align-items: center;">
-    <text style="font-size: 30px;">{{timeBatteryStr}}</text>
+    <text style="font-size: 30px; color: gray;">{{timeBatteryStr}}</text>
   </div>
 
   <!-- pageLines -->
@@ -17,7 +17,7 @@
 
   <!-- progress -->
   <div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; top: {{uiSizes.screenHeight - uiSizes.topMargin}}px; justify-content: center; align-items: center; background-color: transparent;">
-    <text style="font-size: 30px;">{{progress}}%</text>
+    <text style="font-size: 30px; color: gray;">{{progress}}%</text>
   </div>
 
   <!-- control -->

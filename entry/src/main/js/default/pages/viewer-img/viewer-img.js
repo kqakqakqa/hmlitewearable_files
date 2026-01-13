@@ -5,7 +5,7 @@ let clickTimeout = null;
 export default {
   data: {
     uiSizes: $app.getImports().UiSizes,
-    uiRefresh: true,
+    // uiRefresh: true,
     showTitle: true,
     fileName: "",
     imgCopyName: "",
@@ -20,7 +20,13 @@ export default {
     const fileExtsLen = fileExts.length;
     const fileExt = fileExtsLen > 1 ? fileExts[fileExtsLen - 1].toLowerCase() : "bin";
     const fileSubExt = fileExtsLen > 2 ? fileExts[fileExtsLen - 2].toLowerCase() : "";
-    const isSubExtImage = (
+    const isExtImg = (
+      fileExt === "bmp" ||
+      fileExt === "jpg" ||
+      fileExt === "png" ||
+      fileExt === "bin"
+    );
+    const isSubExtImg = (
       fileSubExt === "bmp" ||
       fileSubExt === "jpg" ||
       fileSubExt === "png" ||
@@ -28,8 +34,8 @@ export default {
     );
 
     // image
-    this.imgCopyName = Date.now() + "." + (isSubExtImage ? fileSubExt : fileExt);
-    const imgDir = "internal://app\\..\\../run/" + $app.getImports().BundleName.bundleName + "/assets/js/default/zhshi-file-img";
+    this.imgCopyName = Date.now() + "." + ((isExtImg && fileExt) || (isSubExtImg && fileSubExt) || "bin");
+    const imgDir = "internal://app\\..\\../run/" + $app.getImports().BundleName.bundleName + "/assets/js/default/viewer-img";
     $app.getImports().file.rmdir({
       uri: imgDir,
       recursive: true,
@@ -40,12 +46,12 @@ export default {
             $app.getImports().file.copy({
               srcUri: "internal://app" + $app.getImports().paths.paths.join(""),
               dstUri: imgDir + "/" + this.imgCopyName,
-              complete: () => {
-                this.uiRefresh = false;
-                setTimeout(() => {
-                  this.uiRefresh = true;
-                }, 50);
-              },
+              // complete: () => {
+              //   this.uiRefresh = false;
+              //   setTimeout(() => {
+              //     this.uiRefresh = true;
+              //   }, 50);
+              // },
             });
           }
         });

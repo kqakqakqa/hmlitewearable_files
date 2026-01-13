@@ -37,12 +37,27 @@ function getByteLen(str) {
 function estimateCharWidth(char) {
   const code = char.charCodeAt(0);
   if ("\r\n\x1F".indexOf(char) >= 0) return 0;
-  if (code >= 0x20 && code <= 0x7E) {
-    if ("Il,.'`!:; ".indexOf(char) >= 0) return 0.25;
-    else if ("MmWw@#%&".indexOf(char) >= 0) return 1;
-    else return 0.75;
-  }
-  return 1;
+  // 非 ASCII（汉字）
+  if (code > 0x80) return 1;
+  // 数字 0–9
+  if (code >= 0x30 && code <= 0x39) return 22 / 32;
+  // 小写特例
+  if ("tijl".indexOf(char) >= 0) return 9.875 / 32;
+  if (char === "m") return 31 / 32;
+  if (char === "w") return 28 / 32;
+  // 其他小写 a–z
+  if (code >= 0x61 && code <= 0x7A) return 20.3 / 32;
+  // 大写特例
+  if (char === "I") return 10 / 32;
+  if (char === "W") return 35 / 32;
+  if (char === "M") return 31 / 32;
+  // 其他大写 A–Z
+  if (code >= 0x41 && code <= 0x5A) return 23.5 / 32;
+  // ASCII 特例
+  if (",.'`!:; ".indexOf(char) >= 0) return 9 / 32;
+  // 其他 ASCII
+  if (code >= 0x00 && code <= 0x80) return 21 / 32;
+  return 21 / 32;
 }
 
 function safeDecodeUTF8(bytes) {
@@ -67,6 +82,7 @@ function safeDecodeUTF8(bytes) {
           continue;
         }
       }
+      result += "�";
       i += 1; // 不合法，跳过 byte1
     } else if (byte1 >= 0xE0 && byte1 <= 0xEF) {
       // 3字节字符
@@ -82,6 +98,7 @@ function safeDecodeUTF8(bytes) {
           continue;
         }
       }
+      result += "�";
       i += 1; // 不合法，跳过 byte1
     } else if (byte1 >= 0xF0 && byte1 <= 0xF4) {
       // 4字节字符（可能会超出 BMP 需要 surrogate pair）
@@ -104,9 +121,11 @@ function safeDecodeUTF8(bytes) {
           continue;
         }
       }
+      result += "�";
       i += 1; // 不合法，跳过 byte1
     } else {
       // 非法起始字节
+      result += "�";
       i += 1;
     }
   }
@@ -137,11 +156,12 @@ export default {
     });
     $app.getImports().file.get({
       uri: uriPath,
+      fail: (data, code) => { this.showFailData(data + " (when get file len)", code); },
       success: f => {
         fileLen = f.length;
+        // if (fileLen === 0) return this.showFailData("文件是空的", "");
         this.readPage("next");
       },
-      fail: this.showFailData,
     });
   },
   onDestroy() {
@@ -167,37 +187,53 @@ export default {
     }
     console.log("read position: " + openPosition + "/" + fileLen);
     console.log("readLen: " + readLen);
-    $app.getImports().file.readArrayBuffer({
+    $app.getImports().file.readText({
       uri: uriPath,
       position: openPosition,
       length: readLen,
+      fail: (data, code) => { this.showFailData(data + " (when read file text)", code); },
       success: d => {
         this.failData = "";
-        const text = safeDecodeUTF8(d.buffer);
-        if (direction == "prev") {
-          this.sliceToPage(text.split("").reverse().join(""));
-          this.page = this.page.split("").reverse().join("");
-          openPosition = oldPosition - pageLen;
-          // if (openPosition > 0 && openPosition < 3) { // bug fix
-          //   openPosition = 0;
-          //   pageLen = 0;
-          //   return this.readPage("next");
-          // }
-        } else if (direction == "next") {
-          this.sliceToPage(text);
-        }
-        // console.warn(`read: ${JSON.stringify(text)} (${readLen}), sliced: ${JSON.stringify(this.page)} (${pageLen})`);
-        console.log("new position: " + openPosition + "/" + fileLen);
-        console.log("pageLen: " + pageLen);
-        this.pageLines = this.page.split("\n");
-        this.hasNext = openPosition + pageLen < fileLen - 1; // bug fix
-        this.hasPrev = openPosition > 0 + 1; // bug fix
-        this.progress = (!this.hasNext && !this.hasPrev) ? "--" :
-          !this.hasNext ? "100" :
-            !this.hasPrev ? "0" :
-              (openPosition / fileLen * 100).toFixed(2);
+
+        $app.getImports().file.writeText({
+          uri: "internal://app/viewer-text-temp",
+          text: d.text,
+          fail: (data, code) => { this.showFailData(data + " (when write page temp)", code); },
+          success: () => {
+
+            $app.getImports().file.readArrayBuffer({
+              uri: "internal://app/viewer-text-temp",
+              fail: (data, code) => { this.showFailData(data + " (when read page temp arrayBuffer)", code); },
+              success: d => {
+                this.failData = "";
+                const text = safeDecodeUTF8(d.buffer);
+                if (direction == "prev") {
+                  this.sliceToPage(text.split("").reverse().join(""));
+                  this.page = this.page.split("").reverse().join("");
+                  openPosition = oldPosition - pageLen;
+                  // if (openPosition > 0 && openPosition < 3) { // bug fix
+                  //   openPosition = 0;
+                  //   pageLen = 0;
+                  //   return this.readPage("next");
+                  // }
+                } else if (direction == "next") {
+                  this.sliceToPage(text);
+                }
+                // console.warn(`read: ${JSON.stringify(text)} (${readLen}), sliced: ${JSON.stringify(this.page)} (${pageLen})`);
+                console.log("new position: " + openPosition + "/" + fileLen);
+                console.log("pageLen: " + pageLen);
+                this.pageLines = this.page.split("\n");
+                this.hasNext = openPosition + pageLen < fileLen - 1; // bug fix
+                this.hasPrev = openPosition > 0 + 1; // bug fix
+                this.progress = (!this.hasNext && !this.hasPrev) ? "--" :
+                  !this.hasNext ? "100" :
+                    !this.hasPrev ? "0" :
+                      (openPosition / fileLen * 100).toFixed(2);
+              },
+            });
+          }
+        });
       },
-      fail: this.showFailData,
     });
   },
   sliceToPage(str) {

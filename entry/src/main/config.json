@@ -1,10 +1,10 @@
 {
   "app": {
-    "bundleName": "com.github.kqakqakqa.zhshi.files",
+    "bundleName": "com.github.kqakqakqa.hmlitewearable.files",
     "vendor": "kqakqakqa",
     "version": {
       "code": 0,
-      "name": "1.7.20251102"
+      "name": "1.8.20260114"
     }
   },
   "deviceConfig": {},
@@ -21,7 +21,7 @@
       {
         "name": "default",
         "icon": "$media:icon",
-        "label": "$string:zhshi_files",
+        "label": "$string:appName",
         "type": "page"
       }
     ],

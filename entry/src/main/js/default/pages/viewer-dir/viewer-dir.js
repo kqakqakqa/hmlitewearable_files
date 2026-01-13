@@ -64,8 +64,8 @@ export default {
             fileSubExt == "bmp" ||
             fileSubExt == "jpg" ||
             fileSubExt == "png" ||
-            fileSubExt == "bin" ||
-            f.length > 102400
+            fileSubExt == "bin" // ||
+            // f.length > 100000
           );
           if (isImage) {
             return $app.getImports().Router.replace({ uri: "pages/viewer-img/viewer-img" });
