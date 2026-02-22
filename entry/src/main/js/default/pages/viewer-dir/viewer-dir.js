@@ -5,7 +5,7 @@ let fileCount = 0;
 
 export default {
   data: {
-    uiSizes: $app.getImports().UiSizes,
+    uiSizes: $app.getImports().uiSizes,
     path: "",
     files: [],
     failData: "",
@@ -17,26 +17,34 @@ export default {
   onReady() {
     this.openDir();
   },
-  onDestroy() {
+  onShow() {
+    if (this.$refs.fileList.rotation) this.$refs.fileList.rotation({ focus: true });
+  },
+  onHide() {
+    if (this.$refs.fileList.rotation) this.$refs.fileList.rotation({ focus: false });
   },
   onGoParentClick() {
-    $app.getImports().paths.paths.push("\\..");
+    $app.getImports().memory.paths.push("\\..");
     this.clearPageData();
     this.openDir();
   },
   onGoBackClick() {
-    if ($app.getImports().paths.paths.length > 0) {
-      $app.getImports().paths.paths.pop();
-      this.clearPageData();
-      this.openDir();
-    }
+    if ($app.getImports().memory.paths.length === 0) return $app.getImports().router.replace({ uri: "pages/menu/menu" });
+
+    $app.getImports().memory.paths.pop();
+    this.clearPageData();
+    this.openDir();
   },
   onGoClick(uri) {
-    $app.getImports().paths.paths.push("/" + uri.split("/").slice(-1).join(""));
+    $app.getImports().memory.paths.push("/" + uri.slice(uri.lastIndexOf("/") + 1));
     this.openPath();
   },
+  onGoLongpress(uri) {
+    $app.getImports().memory.paths.push("/" + uri.slice(uri.lastIndexOf("/") + 1));
+    $app.getImports().router.replace({ uri: "pages/viewer-dir/viewer-dir-options/viewer-dir-options" });
+  },
   openPath() {
-    this.path = $app.getImports().paths.paths.join("");
+    this.path = $app.getImports().memory.paths.join("");
     console.log("open path " + this.path);
     $app.getImports().file.get({
       uri: "internal://app" + this.path,
@@ -50,10 +58,15 @@ export default {
 
         // file
         if (f.type == "file") {
-          const fileExts = f.uri.split(".");
+          const fileExts = f.uri.slice(f.uri.lastIndexOf("/") + 1).split(".");
           const fileExtsLen = fileExts.length;
           const fileExt = fileExtsLen > 1 ? fileExts[fileExtsLen - 1].toLowerCase() : "";
           const fileSubExt = fileExtsLen > 2 ? fileExts[fileExtsLen - 2].toLowerCase() : "";
+
+          // no ext
+          if (fileExtsLen <= 1) {
+            return $app.getImports().router.replace({ uri: "pages/viewer-dir/viewer-dir-options/viewer-dir-options" });
+          }
 
           // image
           const isImage = (
@@ -64,15 +77,14 @@ export default {
             fileSubExt == "bmp" ||
             fileSubExt == "jpg" ||
             fileSubExt == "png" ||
-            fileSubExt == "bin" // ||
-            // f.length > 100000
+            fileSubExt == "bin"
           );
           if (isImage) {
-            return $app.getImports().Router.replace({ uri: "pages/viewer-img/viewer-img" });
+            return $app.getImports().router.replace({ uri: "pages/viewer-img/viewer-img" });
           }
 
           // text
-          return $app.getImports().Router.replace({ uri: "pages/viewer-text/viewer-text" });
+          return $app.getImports().router.replace({ uri: "pages/viewer-text/viewer-text" });
         }
 
         return this.showFailData("未知文件类型 " + f.type);
@@ -83,19 +95,19 @@ export default {
   openDir() {
     this.clearPathData();
     this.failData = "loading";
-    this.path = $app.getImports().paths.paths.join("");
+    this.path = $app.getImports().memory.paths.join("");
     $app.getImports().file.list({
       uri: "internal://app" + this.path,
       success: d2 => {
         fileCount = d2.fileList.length;
-        for (let f = $app.getImports().paths.position; f < Math.min($app.getImports().paths.position + maxFiles, fileCount); f++) {
+        for (let f = $app.getImports().memory.position; f < Math.min($app.getImports().memory.position + maxFiles, fileCount); f++) {
           this.files.push({
-            uri: d2.fileList[f].uri.split("/").slice(-1).join(""),
+            uri: d2.fileList[f].uri.slice(d2.fileList[f].uri.lastIndexOf("/") + 1),
             color: d2.fileList[f].type == 'dir' ? '#ffa' : '#aaf',
           });
         }
-        this.hasNext = $app.getImports().paths.position + maxFiles < fileCount;
-        this.hasPrev = $app.getImports().paths.position > 0;
+        this.hasNext = $app.getImports().memory.position + maxFiles < fileCount;
+        this.hasPrev = $app.getImports().memory.position > 0;
         this.failData = "";
       },
       fail: this.showFailData
@@ -107,7 +119,7 @@ export default {
     this.failData = "";
   },
   clearPageData() {
-    $app.getImports().paths.position = 0;
+    $app.getImports().memory.position = 0;
     fileCount = 0;
     this.hasPrev = false;
     this.hasNext = false;
@@ -118,11 +130,11 @@ export default {
     this.failData = code + " " + data + (code == 300 ? "\n(可能是空文件夹)" : "");
   },
   onPrevPageClick() {
-    $app.getImports().paths.position = Math.max($app.getImports().paths.position - maxFiles, 0);
+    $app.getImports().memory.position = Math.max($app.getImports().memory.position - maxFiles, 0);
     this.openDir();
   },
   onNextPageClick() {
-    $app.getImports().paths.position = Math.min($app.getImports().paths.position + maxFiles, fileCount);
+    $app.getImports().memory.position = Math.min($app.getImports().memory.position + maxFiles, fileCount);
     this.openDir();
   },
 }

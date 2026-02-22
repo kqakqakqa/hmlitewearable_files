@@ -4,7 +4,7 @@
 
   <div if="{{showTitle}}" on:click="nullFn" on:swipe="nullFn" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 96 + 2}}px; flex-direction: column; background-color: transparent;">
     <div on:click="onGoBackClick" on:swipe="nullFn" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; justify-content: center; align-items: center; background-color: #aa000000;">
-      <text style="font-size: 30px;">{{ "[←]" }}</text>
+      <text style="font-size: 30px;">{{"[←]"}}</text>
     </div>
     <div style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center; align-items: center; background-color: #aa000000;">
       <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px;">{{fileName}}</text>

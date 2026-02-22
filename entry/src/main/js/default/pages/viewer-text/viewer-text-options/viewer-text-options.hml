@@ -1,0 +1,101 @@
+<div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="mainList" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+
+    <!-- timeBattery -->
+    <list-item
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px; align-items: flex-end; justify-content: center;">
+      <text style="width: 280px; margin-bottom: 24px; text-align: center; font-size: 30px;">{{timeBatteryStr}}</text>
+    </list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+        <div style="width: 280px; height: 72px; align-items: center;">
+          <text style="font-size: 38px;">阅读设置</text>
+        </div>
+        <div
+          style="width: {{uiSizes.uiWidth}}px; height: 72px; justify-content: flex-end; background-color: transparent;">
+          <div on:click="onGoBackClick" class="ui-round-btn">
+            <image style="width: 44px; height: 44px;" src="/common/ic_public_arrow_left.png">﹤</image>
+          </div>
+        </div>
+      </stack>
+    </list-item>
+
+    <!-- theme -->
+    <list-item class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 204px;">
+      <div class="main-card" style="width: {{uiSizes.uiWidth}}px; height: 192px;">
+        <text class="main-card-title">颜色主题</text>
+        <list ref="themeList" class="option-list"
+          style="width: {{uiSizes.uiWidth}}px; height: 84px; padding-left: 0px; padding-right: 0px;">
+          <list-item style="width: 24px; height: 0px; background-color: transparent;"></list-item>
+          <list-item class="option-card-wrapper"
+            style="border-color: {{theme === '纯黑' ? '#6495ed' : '#00000000'}};">
+            <div on:click="{{changeTheme('纯黑')}}" class="option-card" style="background-color: #000;">
+              <text style="color: #fff; font-size: 30px;">纯黑</text>
+            </div>
+          </list-item>
+          <list-item class="option-card-wrapper"
+            style="border-color: {{theme === '纯白' ? '#6495ed' : '#00000000'}};">
+            <div on:click="{{changeTheme('纯白')}}" class="option-card" style="background-color: #fff;">
+              <text style="color: #000; font-size: 30px;">纯白</text>
+            </div>
+          </list-item>
+          <list-item class="option-card-wrapper"
+            style="border-color: {{theme === '深灰' ? '#6495ed' : '#00000000'}};">
+            <div on:click="{{changeTheme('深灰')}}" class="option-card" style="background-color: #333;">
+              <text style="color: #ddd; font-size: 30px;">深灰</text>
+            </div>
+          </list-item>
+          <list-item class="option-card-wrapper"
+            style="border-color: {{theme === '浅灰' ? '#6495ed' : '#00000000'}};">
+            <div on:click="{{changeTheme('浅灰')}}" class="option-card" style="background-color: #ddd;">
+              <text style="color: #333; font-size: 30px;">浅灰</text>
+            </div>
+          </list-item>
+          <list-item style="width: 24px; height: 0px; background-color: transparent;"></list-item>
+        </list>
+      </div>
+    </list-item>
+
+    <!-- fontSize -->
+    <list-item class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 204px;">
+      <div class="main-card" style="width: {{uiSizes.uiWidth}}px; height: 192px;">
+        <text class="main-card-title">文字大小</text>
+        <div class="option-list" style="width: {{uiSizes.uiWidth}}px; height: 84px;">
+          <div class="option-card-wrapper"
+            style="border-color: {{fontSize === '30px' ? '#6495ed' : '#00000000'}};">
+            <div on:click="{{changeFontSize('30px')}}" class="option-card" style="background-color: #333;">
+              <text style="font-size: 30px;">30px</text>
+            </div>
+          </div>
+          <div class="option-card-wrapper"
+            style="border-color: {{fontSize === '38px' ? '#6495ed' : '#00000000'}};">
+            <div on:click="{{changeFontSize('38px')}}" class="option-card" style="background-color: #333;">
+              <text style="font-size: 38px;">38px</text>
+            </div>
+          </div>
+        </div>
+      </div>
+    </list-item>
+
+    <!-- turnPage -->
+    <list-item class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 180px;">
+      <div class="main-card" style="width: {{uiSizes.uiWidth}}px; height: 180px;">
+        <text class="main-card-title">自动翻页速度</text>
+        <div class="option-list" style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+          <div on:click="{{turnPageSpeedDown()}}" class="option-round-btn">
+            <text style="font-size: 30px;">-</text>
+          </div>
+          <text style="margin-left: 24px; margin-right: 12px; font-size: 30px;">{{turnPageSpeed}}秒</text>
+          <div on:click="{{turnPageSpeedUp()}}" class="option-round-btn">
+            <text style="font-size: 30px;">+</text>
+          </div>
+        </div>
+      </div>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px; background-color: transparent;"></list-item>
+
+  </list>
+</div>

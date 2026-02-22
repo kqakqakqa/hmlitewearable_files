@@ -1,0 +1,86 @@
+{
+  "description": "示例脚本 v1",
+  "steps": [
+    {
+      "call": "console.log",
+      "params": "创建目录"
+    },
+    {
+      "call": "file.mkdir",
+      "params": {
+        "uri": "internal://app/script-test/dir",
+        "recursive": true
+      }
+    },
+    {
+      "call": "console.log",
+      "params": "写入文本文件"
+    },
+    {
+      "call": "file.writeText",
+      "params": {
+        "uri": "internal://app/script-test/hello.txt",
+        "text": "{\"msg\":\"hello\"}",
+        "append": false
+      }
+    },
+    {
+      "call": "console.log",
+      "params": "写入二进制数据"
+    },
+    {
+      "call": "file.writeArrayBuffer",
+      "params": {
+        "uri": "internal://app/script-test/bin.dat",
+        "buffer": [
+          0,
+          1
+        ],
+        "append": false
+      }
+    },
+    {
+      "call": "console.log",
+      "params": "复制文件"
+    },
+    {
+      "call": "file.copy",
+      "params": {
+        "srcUri": "internal://app/script-test/hello.txt",
+        "dstUri": "internal://app/script-test/hello_copy.txt"
+      }
+    },
+    {
+      "call": "console.log",
+      "params": "移动文件"
+    },
+    {
+      "call": "file.move",
+      "params": {
+        "srcUri": "internal://app/script-test/bin.dat",
+        "dstUri": "internal://app/script-test/bin_move.dat"
+      }
+    },
+    {
+      "call": "console.log",
+      "params": "删除文件"
+    },
+    {
+      "call": "file.delete",
+      "params": {
+        "uri": "internal://app/script-test/hello_copy.txt"
+      }
+    },
+    {
+      "call": "console.log",
+      "params": "删除目录"
+    },
+    {
+      "call": "file.rmdir",
+      "params": {
+        "uri": "internal://app/示例脚本演示/dir",
+        "recursive": true
+      }
+    }
+  ]
+}

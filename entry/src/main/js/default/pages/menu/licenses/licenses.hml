@@ -1,7 +1,21 @@
 <stack on:swipe="swipeBack" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
-  <swiper on:swipe="swipeBack" vertical="true" style="top: {{-uiSizes.screenHeight}}px; left:{{uiSizes.leftMargin}}px; width: {{uiSizes.uiWidth}}px; height: {{uiSizes.screenHeight * 2}}px;">
-    <div style="height: 0px;"></div>
-    <div style="height: {{uiSizes.topMargin}}px;"></div>
-    <text for="{{licenses.split('\n')}}" style="width: {{uiSizes.uiWidth}}px;">{{$item}}</text>
-  </swiper>
+  <list on:swipe="swipeBack" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px;"></list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 48px; align-items: center; justify-content: center;">
+      <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px; text-align: center;">开放源代码许可</text>
+    </list-item>
+
+    <!-- item -->
+    <list-item
+      style="width: {{uiSizes.screenWidth}}px; height: {{426 * licenses.length}}px; align-items: center; justify-content: center; flex-direction: column;">
+      <div for="{{licenses}}"
+        style="width: {{uiSizes.uiWidth - 6}}px; height: 420px; margin-top: 6px; padding: 12px; background-color: #444; border-radius: 24px; border-width: 1px; border-color: dimgrey;">
+        <text style="width: {{uiSizes.uiWidth - 6 - 24}}px; font-size: 30px;">{{$item}}</text>
+      </div>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px;"></list-item>
+  </list>
 </stack>

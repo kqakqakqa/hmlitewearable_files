@@ -1,6 +1,8 @@
-console.info("Router.js onImport");
+import router from "@system.router";
 
-export default {
+console.info("router.js onImport");
+
+const _this = {
   /**
    *
    * @param {Object} d
@@ -15,10 +17,12 @@ export default {
       uri: d.uri,
       params: params,
     };
-    $app.getImports().router.replace(
+    router.replace(
       d.direct ?
         replace :
         { uri: "/pages/router/router", params: replace }
     );
   },
 }
+
+export default _this;

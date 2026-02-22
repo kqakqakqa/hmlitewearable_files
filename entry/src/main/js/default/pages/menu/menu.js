@@ -1,48 +1,35 @@
-import app from "@system.app";
-
-import router from "../../Router.js";
-import UiSizes from "../../UiSizes.js"
-import HeaderTimeBattery from "../../HeaderTimeBattery.js"
+console.info("pages/menu/menu onInit");
 
 export default {
   data: {
-    uiSizes: { screenWidth: 0, screenHeight: 0 },
-    uiRefresh: false,
+    uiSizes: $app.getImports().uiSizes,
     timeBatteryStr: "",
   },
   onInit() {
-    UiSizes.init(this.updateUiSizes);
-    HeaderTimeBattery.subscribe(this.updateTimeBattery);
-  },
-  updateUiSizes(data) {
-    this.uiSizes = data;
-    this.uiRefresh = true;
-  },
-  updateTimeBattery(data) {
-    this.timeBatteryStr = data.time + "  " + data.battery;
+    $app.getImports().headerTimeBattery.subscribe(() => {
+      this.timeBatteryStr = $app.getImports().headerTimeBattery.time + "  " + $app.getImports().headerTimeBattery.battery;
+    });
   },
   clickAbout() {
-    router.replace({
-      uri: "/pages/menu/about/about",
+    $app.getImports().router.replace({
+      uri: "pages/menu/about/about",
     });
   },
   clickLicenses() {
-    router.replace({
-      uri: "/pages/menu/licenses/licenses",
+    $app.getImports().router.replace({
+      uri: "pages/menu/licenses/licenses",
     });
   },
-  clickDeviceInfo() {
-    router.replace({
-      uri: "/pages/menu/deviceInfo/deviceInfo",
+  clickBack() {
+    $app.getImports().router.replace({
+      uri: "/pages/viewer-dir/viewer-dir",
     });
   },
   swipeBack(data) {
-    if (data.direction === "up") return router.replace({
-      uri: "/pages/snake/snake",
-    });
+    if (data.direction === "right") return this.clickBack();
   },
   nullFn() { },
   exitApp() {
-    app.terminate();
+    $app.getImports().app.terminate();
   },
 }

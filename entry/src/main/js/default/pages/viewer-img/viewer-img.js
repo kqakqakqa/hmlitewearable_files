@@ -4,7 +4,7 @@ let clickTimeout = null;
 
 export default {
   data: {
-    uiSizes: $app.getImports().UiSizes,
+    uiSizes: $app.getImports().uiSizes,
     // uiRefresh: true,
     showTitle: true,
     fileName: "",
@@ -15,10 +15,10 @@ export default {
     this.openPath();
   },
   openPath() {
-    this.fileName = $app.getImports().paths.paths[$app.getImports().paths.paths.length - 1].split("/")[1];
+    this.fileName = $app.getImports().memory.paths[$app.getImports().memory.paths.length - 1].split("/")[1];
     const fileExts = this.fileName.split(".");
     const fileExtsLen = fileExts.length;
-    const fileExt = fileExtsLen > 1 ? fileExts[fileExtsLen - 1].toLowerCase() : "bin";
+    const fileExt = fileExtsLen > 1 ? fileExts[fileExtsLen - 1].toLowerCase() : "";
     const fileSubExt = fileExtsLen > 2 ? fileExts[fileExtsLen - 2].toLowerCase() : "";
     const isExtImg = (
       fileExt === "bmp" ||
@@ -44,7 +44,7 @@ export default {
           uri: imgDir,
           complete: () => {
             $app.getImports().file.copy({
-              srcUri: "internal://app" + $app.getImports().paths.paths.join(""),
+              srcUri: "internal://app" + $app.getImports().memory.paths.join(""),
               dstUri: imgDir + "/" + this.imgCopyName,
               // complete: () => {
               //   this.uiRefresh = false;
@@ -60,8 +60,8 @@ export default {
   },
   nullFn() { },
   onGoBackClick() {
-    $app.getImports().paths.paths.pop();
-    return $app.getImports().Router.replace({ uri: "pages/viewer-dir/viewer-dir" });
+    $app.getImports().memory.paths.pop();
+    return $app.getImports().router.replace({ uri: "pages/viewer-dir/viewer-dir" });
   },
   onImgClick() {
     if (clickTimeout) {

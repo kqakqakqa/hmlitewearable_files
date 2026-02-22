@@ -6,7 +6,7 @@ export default {
     params: {},
   },
   onInit() {
-    $app.getImports().Router.replace({
+    $app.getImports().router.replace({
       uri: this.uri,
       params: this.params,
       direct: true,

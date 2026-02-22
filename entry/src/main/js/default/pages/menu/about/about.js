@@ -1,25 +1,14 @@
-import app from "@system.app";
-
-import router from "../../../Router.js";
-import appName from "../../../AppName.js";
-import UiSizes from "../../../UiSizes.js"
+console.info("pages/menu/about/about onInit");
 
 export default {
   data: {
-    uiSizes: { screenWidth: 0, screenHeight: 0 },
-    uiRefresh: false,
-    appName: appName.appName,
-    versionName: app.getInfo().versionName,
+    uiSizes: $app.getImports().uiSizes,
+    appName: $app.getImports().appName.appName,
+    versionName: $app.getImports().app.getInfo().versionName,
   },
-  onInit() {
-    UiSizes.init(this.updateUiSizes);
-  },
-  updateUiSizes(data) {
-    this.uiSizes = data;
-    this.uiRefresh = true;
-  },
+  onInit() { },
   swipeBack(data) {
-    if (data.direction === "right") return router.replace({
+    if (data.direction === "right") return $app.getImports().router.replace({
       uri: "/pages/menu/menu",
     });
   },

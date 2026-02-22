@@ -4,7 +4,7 @@
     "vendor": "kqakqakqa",
     "version": {
       "code": 0,
-      "name": "1.8.20260114"
+      "name": "1.9.20260222"
     }
   },
   "deviceConfig": {},
@@ -32,11 +32,12 @@
           "pages/router/router",
           "pages/menu/menu",
           "pages/menu/about/about",
-          "pages/menu/deviceInfo/deviceInfo",
           "pages/menu/licenses/licenses",
           "pages/viewer-dir/viewer-dir",
+          "pages/viewer-dir/viewer-dir-options/viewer-dir-options",
           "pages/viewer-img/viewer-img",
-          "pages/viewer-text/viewer-text"
+          "pages/viewer-text/viewer-text",
+          "pages/viewer-text/viewer-text-options/viewer-text-options"
         ],
         "name": "default"
       }

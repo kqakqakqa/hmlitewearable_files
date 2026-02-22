@@ -2,11 +2,9 @@
   <list ref="fileList" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
     <!-- title -->
     <list-item style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 96 + 2}}px; background-color: #fff; flex-wrap: wrap;">
-      <div on:click="onGoParentClick" style="width: {{uiSizes.screenWidth / 2}}px; height: {{uiSizes.topMargin}}px; justify-content: flex-end; align-items: center; background-color: #000;">
-        <text style="font-size: 30px;">{{ "[↑]  " }}</text>
-      </div>
-      <div on:click="onGoBackClick" style="width: {{uiSizes.screenWidth / 2}}px; height: {{uiSizes.topMargin}}px; align-items: center; background-color: #000;">
-        <text style="font-size: 30px;">{{ "  [←]" }}</text>
+      <div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; justify-content: center; align-items: center; background-color: #000;">
+        <text on:click="onGoParentClick" style="width: 120px; padding: 30px; text-align: center; font-size: 30px;">{{"[↑]"}}</text>
+        <text on:click="onGoBackClick" style="width: 120px; padding: 30px; text-align: center; font-size: 30px;">{{path ? "[←]" : "[...]"}}</text>
       </div>
       <div style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center; align-items: center; background-color: #000;">
         <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px;">{{path || "internal://app"}}</text>
@@ -16,7 +14,7 @@
     <list-item style="width: {{uiSizes.screenWidth}}px; height: {{!failData ? (97 * files.length + uiSizes.topMargin + ((hasNext || hasPrev) ? 96 : 0)) : (uiSizes.screenHeight - (uiSizes.topMargin + 96 + 2))}}px; flex-direction: column; align-items: center;">
       <!-- file list -->
       <div if="{{!failData}}" style="width: {{uiSizes.uiWidth}}px; height: {{97 * files.length}}px; background-color: #ccc; flex-direction: column;">
-        <div for="{{files}}" on:click="onGoClick({{$item.uri}})" style="width: {{uiSizes.uiWidth}}px; height: 96px; margin-bottom: 1px; align-items: center; background-color: #000;">
+        <div for="{{files}}" on:click="onGoClick({{$item.uri}})" on:longpress="onGoLongpress({{$item.uri}})" style="width: {{uiSizes.uiWidth}}px; height: 96px; margin-bottom: 1px; align-items: center; background-color: #000;">
           <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px; color: {{$item.color}};">{{$item.uri}}</text>
         </div>
       </div>

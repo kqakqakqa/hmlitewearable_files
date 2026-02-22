@@ -1,18 +1,18 @@
-<stack style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+<stack style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px; background-color: {{bgColor}};">
   <!-- timeBatteryStr -->
-  <div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; justify-content: center; align-items: center;">
+  <div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; justify-content: center; align-items: center; background-color: transparent;">
     <text style="font-size: 30px; color: gray;">{{timeBatteryStr}}</text>
   </div>
 
-  <!-- pageLines -->
-  <div style="width: {{uiSizes.uiWidth}}px; height: {{uiSizes.uiHeight}}px; top: {{uiSizes.topMargin}}px; left: {{uiSizes.leftMargin}}px; flex-direction: column;">
-    <text for="{{pageLines}}" style="font-size: 30px;">{{$item}}</text>
+  <!-- textLines -->
+  <div style="width: {{uiSizes.uiWidth}}px; height: {{uiSizes.uiHeight}}px; top: {{uiSizes.topMargin}}px; left: {{uiSizes.leftMargin}}px; flex-direction: column; background-color: transparent;">
+    <text for="{{textLines}}" style="font-size: {{fontSize}}; color: {{textColor}};">{{$item}}</text>
   </div>
 
   <!-- prev next label -->
   <div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.isCircle ? uiSizes.screenHeight : uiSizes.topMargin}}px; top: {{uiSizes.isCircle ? 0 : uiSizes.screenHeight - uiSizes.topMargin}}px; justify-content: space-between; align-items: center; background-color: transparent;">
-    <text style="font-size: 30px;">{{hasPrev ? "  ﹤" : ""}}</text>
-    <text style="font-size: 30px;">{{hasNext ? "﹥  " : ""}}</text>
+    <text style="font-size: 30px; color: gray;">{{hasPrev ? "  ﹤" : ""}}</text>
+    <text style="font-size: 30px; color: gray;">{{hasNext ? "﹥  " : ""}}</text>
   </div>
 
   <!-- progress -->
@@ -32,8 +32,9 @@
 
   <!-- title -->
   <div if="{{showTitle}}" on:click="nullFn" on:swipe="nullFn" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px; flex-direction: column; background-color: transparent;">
-    <div on:click="onGoBackClick" on:swipe="nullFn" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; justify-content: center; align-items: center; background-color: #aa000000;">
-      <text style="font-size: 30px;">{{ "[←]" }}</text>
+    <div on:swipe="nullFn" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; justify-content: center; align-items: center; background-color: #aa000000;">
+      <text on:click="onGoBackClick" style="width: 120px; padding: 30px; text-align: center; font-size: 30px;">{{"[←]"}}</text>
+      <text on:click="onClick" style="width: 120px; padding: 30px; text-align: center; font-size: 30px;">{{"[...]"}}</text>
     </div>
     <div style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center; align-items: center; background-color: #aa000000;">
       <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px;">{{fileName}}</text>
