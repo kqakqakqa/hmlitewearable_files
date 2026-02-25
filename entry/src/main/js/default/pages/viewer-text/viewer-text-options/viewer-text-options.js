@@ -4,7 +4,6 @@ export default {
   data: {
     timeBatteryStr: "",
     uiSizes: $app.getImports().uiSizes,
-    lf: "\n",
     theme: $app.getImports().memory.theme,
     fontSize: $app.getImports().memory.fontSize,
     turnPageSpeed: $app.getImports().memory.turnPageSpeed,

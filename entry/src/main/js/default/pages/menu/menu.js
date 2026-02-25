@@ -10,6 +10,12 @@ export default {
       this.timeBatteryStr = $app.getImports().headerTimeBattery.time + "  " + $app.getImports().headerTimeBattery.battery;
     });
   },
+  onShow() {
+    if (this.$refs.mainList.rotation) this.$refs.mainList.rotation({ focus: true });
+  },
+  onHide() {
+    if (this.$refs.mainList.rotation) this.$refs.mainList.rotation({ focus: false });
+  },
   clickAbout() {
     $app.getImports().router.replace({
       uri: "pages/menu/about/about",

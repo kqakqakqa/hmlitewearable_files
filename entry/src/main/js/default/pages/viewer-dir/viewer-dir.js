@@ -63,8 +63,11 @@ export default {
           const fileExt = fileExtsLen > 1 ? fileExts[fileExtsLen - 1].toLowerCase() : "";
           const fileSubExt = fileExtsLen > 2 ? fileExts[fileExtsLen - 2].toLowerCase() : "";
 
-          // no ext
-          if (fileExtsLen <= 1) {
+          // no ext, json
+          if (fileExtsLen <= 1 ||
+            fileExt == "json" ||
+            fileSubExt == "json"
+          ) {
             return $app.getImports().router.replace({ uri: "pages/viewer-dir/viewer-dir-options/viewer-dir-options" });
           }
 
@@ -83,7 +86,7 @@ export default {
             return $app.getImports().router.replace({ uri: "pages/viewer-img/viewer-img" });
           }
 
-          // text
+          // default, text
           return $app.getImports().router.replace({ uri: "pages/viewer-text/viewer-text" });
         }
 

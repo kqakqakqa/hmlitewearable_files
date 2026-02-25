@@ -78,7 +78,7 @@
     {
       "call": "file.rmdir",
       "params": {
-        "uri": "internal://app/示例脚本演示/dir",
+        "uri": "internal://app/script-test/dir",
         "recursive": true
       }
     }

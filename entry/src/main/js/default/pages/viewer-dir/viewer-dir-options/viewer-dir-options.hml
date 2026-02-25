@@ -10,20 +10,23 @@
       </div>
     </list-item>
 
-    <list-item style="width: {{uiSizes.screenWidth}}px; height: {{!failData ? ((fileInfo_type === 'file' ? 302 : 181) + uiSizes.topMargin) : (uiSizes.screenHeight - (uiSizes.topMargin + 96 + 2))}}px; flex-direction: column; align-items: center;">
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: {{!failData ? ((fileInfo_type === 'file' ? (180 + 180 + 2) : 181) + uiSizes.topMargin) : (uiSizes.screenHeight - (uiSizes.topMargin + 96 + 2))}}px; flex-direction: column; align-items: center;">
       <!-- options -->
-      <div if="{{!failData}}" style="width: {{uiSizes.uiWidth}}px; height: {{fileInfo_type === 'file' ? 302 : 181}}px; background-color: #ccc; flex-direction: column;">
+      <div if="{{!failData}}" style="width: {{uiSizes.uiWidth}}px; height: {{fileInfo_type === 'file' ? (180 + 180 + 2) : 181}}px; background-color: #ccc; flex-direction: column;">
         <!-- info -->
         <div style="width: {{uiSizes.uiWidth}}px; height: 180px; margin-bottom: 1px; align-items: center; background-color: #000;">
           <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px;">类型：{{fileInfo_type === 'dir' ? '目录' : '文件'}}{{lf}}大小：{{fileInfo_length}}{{lf}}修改时间：{{fileInfo_time}}</text>
         </div>
         <!-- open -->
-        <div if="{{fileInfo_type === 'file'}}" style="width: {{uiSizes.uiWidth}}px; height: 120px; margin-bottom: 1px; flex-direction: column; align-items: center; background-color: #000;">
+        <div if="{{fileInfo_type === 'file'}}" style="width: {{uiSizes.uiWidth}}px; height: 180px; margin-bottom: 1px; flex-direction: column; align-items: center; background-color: #000;">
           <div on:click="onOpenAsTextClick()" style="width: {{uiSizes.uiWidth}}px; height: 60px; align-items: center;">
-            <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px; color: #aaf;">{{"[ 以文本形式打开 ]"}}</text>
+            <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px; color: #aaf;">{{"[ 查看文本 ]"}}</text>
           </div>
           <div on:click="onOpenAsImgClick()" style="width: {{uiSizes.uiWidth}}px; height: 60px; align-items: center;">
-            <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px; color: #aaf;">{{"[ 以图片形式打开 ]"}}</text>
+            <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px; color: #aaf;">{{"[ 查看图片 ]"}}</text>
+          </div>
+          <div on:click="onOpenAsScriptClick()" style="width: {{uiSizes.uiWidth}}px; height: 60px; align-items: center;">
+            <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px; color: #aaf;">{{"[ 运行自定义脚本 ]"}}</text>
           </div>
         </div>
       </div>

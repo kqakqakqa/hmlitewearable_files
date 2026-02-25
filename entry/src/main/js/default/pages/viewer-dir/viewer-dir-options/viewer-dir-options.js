@@ -44,6 +44,9 @@ export default {
   onOpenAsImgClick() {
     return $app.getImports().router.replace({ uri: "pages/viewer-img/viewer-img" });
   },
+  onOpenAsScriptClick() {
+    return $app.getImports().router.replace({ uri: "pages/viewer-script/viewer-script-warnings/viewer-script-warnings" });
+  },
 }
 
 function toByteSizeStr(byteLen) {

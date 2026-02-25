@@ -35,7 +35,7 @@ export default {
 
     // image
     this.imgCopyName = Date.now() + "." + ((isExtImg && fileExt) || (isSubExtImg && fileSubExt) || "bin");
-    const imgDir = "internal://app\\..\\../run/" + $app.getImports().BundleName.bundleName + "/assets/js/default/viewer-img";
+    const imgDir = "internal://app\\..\\../run/" + $app.getImports().bundleName.bundleName + "/assets/js/default/viewer-img";
     $app.getImports().file.rmdir({
       uri: imgDir,
       recursive: true,

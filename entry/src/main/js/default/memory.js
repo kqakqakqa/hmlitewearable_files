@@ -14,6 +14,8 @@ const defaults = {
   textColor: "#fff",
   fontSize: "30px",
   turnPageSpeed: 5,
+
+  scriptWarningFinished: false,
 };
 
 function init(onDone) {

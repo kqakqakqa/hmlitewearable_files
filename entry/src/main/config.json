@@ -4,7 +4,7 @@
     "vendor": "kqakqakqa",
     "version": {
       "code": 0,
-      "name": "1.9.20260222"
+      "name": "1.10.20260226"
     }
   },
   "deviceConfig": {},
@@ -37,7 +37,10 @@
           "pages/viewer-dir/viewer-dir-options/viewer-dir-options",
           "pages/viewer-img/viewer-img",
           "pages/viewer-text/viewer-text",
-          "pages/viewer-text/viewer-text-options/viewer-text-options"
+          "pages/viewer-text/viewer-text-options/viewer-text-options",
+          "pages/viewer-script/viewer-script",
+          "pages/viewer-script/viewer-script-warnings/viewer-script-warnings",
+          "pages/viewer-script/viewer-script-run/viewer-script-run"
         ],
         "name": "default"
       }

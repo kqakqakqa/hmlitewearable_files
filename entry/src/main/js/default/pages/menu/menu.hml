@@ -1,14 +1,52 @@
-<stack on:swipe="swipeBack" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
-  <list style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+<div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="mainList" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+
+    <!-- timeBattery -->
     <list-item
-      style="width: {{uiSizes.screenWidth}}px; height: {{(uiSizes.topMargin + 24) + (96 * 3)}}px; flex-direction: column; align-items: center;">
-      <div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin}}px; align-items: flex-end; margin-bottom: 24px;">
-        <text style="width: {{uiSizes.screenWidth}}px; text-align: center; font-size: 30px;">{{timeBatteryStr}}</text>
-      </div>
-      <text on:click="clickAbout" class="ui-btn">关于</text>
-      <text on:click="clickLicenses" class="ui-btn">开放源代码许可</text>
-      <text on:click="exitApp" on:swipe="nullFn" class="ui-btn">退出应用</text>
-      <text on:click="clickBack" class="ui-btn gray-btn">返回</text>
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px; align-items: flex-end; justify-content: center;">
+      <text style="width: 280px; margin-bottom: 24px; text-align: center; font-size: 30px;">{{timeBatteryStr}}</text>
     </list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+        <div style="width: 280px; height: 72px; align-items: center;">
+          <text style="font-size: 38px;">选项</text>
+        </div>
+        <div
+          style="width: {{uiSizes.uiWidth}}px; height: 72px; justify-content: flex-end; background-color: transparent;">
+          <div on:click="clickBack" class="ui-round-btn">
+            <image style="width: 44px; height: 44px;" src="/common/chevron_left-44px.png"></image>
+          </div>
+        </div>
+      </stack>
+    </list-item>
+
+    <list-item class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 96px;">
+      <div on:click="clickAbout" class="main-card"
+        style="width: {{uiSizes.uiWidth}}px; height: 84px; flex-direction: row; justify-content: space-between;">
+        <text class="main-card-title">关于</text>
+        <text style="font-size: 30px; color: gray; margin-right: 24px;">﹥</text>
+      </div>
+    </list-item>
+
+    <list-item class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 96px;">
+      <div on:click="clickLicenses" class="main-card"
+        style="width: {{uiSizes.uiWidth}}px; height: 84px; flex-direction: row; justify-content: space-between;">
+        <text class="main-card-title">开放源代码许可</text>
+        <text style="font-size: 30px; color: gray; margin-right: 24px;">﹥</text>
+      </div>
+    </list-item>
+
+    <list-item class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 96px;">
+      <div on:click="exitApp" class="main-card"
+        style="width: {{uiSizes.uiWidth}}px; height: 84px; flex-direction: row; justify-content: space-between;">
+        <text class="main-card-title">退出应用</text>
+        <image style="width: 36px; height: 36px; margin-right: 24px;" src="/common/leave_home_fill-36px.png"></image>
+      </div>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px; background-color: transparent;"></list-item>
+
   </list>
-</stack>
+</div>

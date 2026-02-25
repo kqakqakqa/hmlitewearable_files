@@ -1,0 +1,38 @@
+<div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="mainList" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+
+    <!-- timeBattery -->
+    <list-item
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px; align-items: flex-end; justify-content: center;">
+      <text style="width: 280px; margin-bottom: 24px; text-align: center; font-size: 30px;">{{timeBatteryStr}}</text>
+    </list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+        <div style="width: 280px; height: 72px; align-items: center;">
+          <text style="font-size: 38px;">运行脚本</text>
+        </div>
+        <div
+          style="width: {{uiSizes.uiWidth}}px; height: 72px; justify-content: flex-end; background-color: transparent;">
+          <div on:click="onGoBackClick" class="ui-round-btn">
+            <image style="width: 44px; height: 44px;" src="/common/chevron_left-44px.png"></image>
+          </div>
+        </div>
+      </stack>
+    </list-item>
+
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 13px; justify-content: center;">
+      <div style="width: {{uiSizes.uiWidth}}px; height: 1px; background-color: gray;"></div>
+    </list-item>
+
+    <!-- log -->
+    <list-item class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 721px;">
+      <div style="width: {{uiSizes.uiWidth}}px; height: 720px; flex-direction: column;">
+        <text style="width: {{uiSizes.uiWidth}}px; margin-bottom: 12px; font-size: 30px;">{{log}}</text>
+        <div style="width: {{uiSizes.uiWidth}}px; height: 1px; background-color: gray;"></div>
+      </div>
+    </list-item>
+
+  </list>
+</div>

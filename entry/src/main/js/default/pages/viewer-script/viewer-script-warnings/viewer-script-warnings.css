@@ -1,0 +1,11 @@
+.ui-btn {
+  width: 240px;
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #222;
+  border-width: 1px;
+  border-color: #666;
+  border-radius: 24px;
+  text-align: center;
+  font-size: 30px;
+}

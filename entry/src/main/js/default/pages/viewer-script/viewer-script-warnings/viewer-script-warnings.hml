@@ -1,0 +1,28 @@
+<div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="mainList" style="width: {{uiSizes.screenWidth}}px; height: 480px;">
+
+    <!-- timeBattery -->
+    <list-item
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px; align-items: flex-end; justify-content: center;">
+      <text style="width: 280px; margin-bottom: 24px; text-align: center; font-size: 30px;">{{timeBatteryStr}}</text>
+    </list-item>
+
+    <!-- icon -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 120px; justify-content: center;">
+      <image style="width: 96px; height: 96px;" src="/common/exclamationmark_circle_fill-96px.png"></image>
+    </list-item>
+
+    <!-- text -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 276px; flex-direction: column; align-items: center;">
+      <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px; text-align: center;">{{warningText}}</text>
+      <text on:click="onGoBackClick" class="ui-btn"
+        style="margin-top: 24px;">取消</text>
+      <text on:click="onContinueClick" on:swipe="onContinueSwipe" class="ui-btn"
+        style="background-color: #e84026; opacity: {{continueTimeoutTime ? 0.75 : 1}};">继续{{scriptWarningFinished ?
+        "﹥﹥﹥" : (continueTimeoutTime > 0 ? ("（" + continueTimeoutTime + "）") : "")}}</text>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px; background-color: transparent;"></list-item>
+
+  </list>
+</div>

@@ -1,0 +1,63 @@
+<div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="mainList" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+
+    <!-- timeBattery -->
+    <list-item
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px; align-items: flex-end; justify-content: center;">
+      <text style="width: 280px; margin-bottom: 24px; text-align: center; font-size: 30px;">{{timeBatteryStr}}</text>
+    </list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+        <div style="width: 280px; height: 72px; align-items: center;">
+          <text style="font-size: 38px;">自定义脚本</text>
+        </div>
+        <div
+          style="width: {{uiSizes.uiWidth}}px; height: 72px; justify-content: flex-end; background-color: transparent;">
+          <div on:click="onGoBackClick" class="ui-round-btn">
+            <image style="width: 44px; height: 44px;" src="/common/chevron_left-44px.png"></image>
+          </div>
+        </div>
+      </stack>
+    </list-item>
+
+    <!-- description -->
+    <list-item if="{{errMessage === ''}}" class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 252px;">
+      <div class="main-card" style="width: {{uiSizes.uiWidth}}px; height: 240px;">
+        <text class="main-card-title">描述</text>
+        <div style="width: {{uiSizes.uiWidth}}px; height: 180px; padding-left: 24px; background-color: transparent;">
+          <text style="width: {{uiSizes.uiWidth - 48}}px; font-size: 30px;">{{description}}</text>
+        </div>
+      </div>
+    </list-item>
+
+    <!-- viewText -->
+    <list-item if="{{errMessage === ''}}" class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 96px;">
+      <div on:click="onViewTextClick" class="main-card"
+        style="width: {{uiSizes.uiWidth}}px; height: 84px; flex-direction: row; justify-content: space-between;">
+        <text class="main-card-title">阅读脚本</text>
+        <text style="font-size: 30px; color: gray; margin-right: 24px;">﹥</text>
+      </div>
+    </list-item>
+
+    <!-- run btn -->
+    <list-item if="{{errMessage === ''}}" class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 96px;">
+      <div on:click="onRunClick" class="main-card"
+        style="width: {{uiSizes.uiWidth}}px; height: 84px; flex-direction: row; justify-content: space-between;">
+        <text class="main-card-title">运行</text>
+        <image style="width: 36px; height: 36px; margin-right: 24px;" src="/common/play_fill-36px.png"></image>
+      </div>
+    </list-item>
+
+    <!-- error -->
+    <list-item if="{{errMessage !== ''}}" class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 180px;">
+      <div style="width: {{uiSizes.uiWidth}}px; height: 180px;">
+        <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px;">{{errMessage}}</text>
+      </div>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px; background-color: transparent;"></list-item>
+
+  </list>
+</div>
