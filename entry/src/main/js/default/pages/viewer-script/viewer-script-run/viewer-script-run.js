@@ -64,18 +64,18 @@ export default {
           this.showLog("" + p.params);
           p.success();
         },
-        "file.mkdir": $app.getImports().file.mkdir,
-        "file.writeText": $app.getImports().file.writeText,
+        "file.mkdir": p => fileApiCheck(p, $app.getImports().file.mkdir),
+        "file.writeText": p => fileApiCheck(p, $app.getImports().file.writeText),
         "file.writeArrayBuffer": p => {
           if (Array.isArray(p.buffer)) {
             p.buffer = new Uint8Array(p.buffer);
           }
-          $app.getImports().file.writeArrayBuffer(p);
+          fileApiCheck(p, $app.getImports().file.writeArrayBuffer);
         },
-        "file.copy": $app.getImports().file.copy,
-        "file.move": $app.getImports().file.move,
-        "file.delete": $app.getImports().file.delete,
-        "file.rmdir": $app.getImports().file.rmdir,
+        "file.copy": p => fileApiCheck(p, $app.getImports().file.copy),
+        "file.move": p => fileApiCheck(p, $app.getImports().file.move),
+        "file.delete": p => fileApiCheck(p, $app.getImports().file.delete),
+        "file.rmdir": p => fileApiCheck(p, $app.getImports().file.rmdir),
       };
 
       const func = funcs[step.call];
@@ -126,3 +126,13 @@ export default {
     return $app.getImports().router.replace({ uri: "pages/viewer-text/viewer-text" });
   },
 }
+
+function fileApiCheck(p, func) {
+  const uri = "" + (p.uri || "");
+  console.log(uri, uri.indexOf("../"))
+  if (uri.indexOf("../") !== -1 || uri.indexOf("..\\") !== -1) {
+    p.fail("File or directory not exist", "301");
+    return;
+  }
+  func(p);
+};
