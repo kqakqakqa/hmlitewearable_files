@@ -9,6 +9,7 @@ const warningTexts = [
 ];
 
 let continueTimeout;
+let cancelTimeout;
 
 export default {
   data: {
@@ -17,6 +18,7 @@ export default {
     lf: "\n",
     warningText: "",
     continueTimeoutTime: 0,
+    cancelTimeoutTime: 0,
     warningIndex: 0,
     scriptWarningFinished: $app.getImports().memory.scriptWarningFinished,
   },
@@ -36,40 +38,67 @@ export default {
   onDestroy() {
     clearTimeout(continueTimeout);
     continueTimeout = undefined;
+    clearTimeout(cancelTimeout);
+    cancelTimeout = undefined;
   },
   nextWarning() {
-    if (this.scriptWarningFinished) return this.warningText = warningTexts[warningTexts.length - 1];
-
-    this.warningText = warningTexts[this.warningIndex];
-    this.startTimer();
+    if (this.scriptWarningFinished) {
+      this.warningText = warningTexts[warningTexts.length - 1];
+      this.startCancelTimer();
+    } else {
+      this.warningText = warningTexts[this.warningIndex];
+      this.startContinueTimer();
+    }
   },
-  startTimer() {
-    this.continueTimeoutTime = 5;
+  startContinueTimer() {
     if (continueTimeout) {
       clearTimeout(continueTimeout);
       continueTimeout = undefined;
     }
+    this.continueTimeoutTime = 5;
 
-    const tick = () => {
-      if (this.continueTimeoutTime > 0) {
-        continueTimeout = setTimeout(() => {
-          this.continueTimeoutTime--;
-          tick();
-        }, 1000);
-      }
+    const continueTick = () => {
+      if (this.continueTimeoutTime <= 0) return this.startCancelTimer();
+
+      continueTimeout = setTimeout(() => {
+        this.continueTimeoutTime--;
+        continueTick();
+      }, 1000);
     };
-    tick();
+    continueTick();
+  },
+  startCancelTimer() {
+    if (cancelTimeout) {
+      clearTimeout(cancelTimeout);
+      cancelTimeout = undefined;
+    }
+    this.cancelTimeoutTime = 10;
+
+    const cancelTick = () => {
+      if (this.cancelTimeoutTime <= 0) return this.onGoBackClick();
+
+      cancelTimeout = setTimeout(() => {
+        this.cancelTimeoutTime--;
+        cancelTick();
+      }, 1000);
+    };
+    cancelTick();
   },
   onContinueClick() {
     if (this.scriptWarningFinished) return;
     if (this.continueTimeoutTime > 0) return;
 
+    if (cancelTimeout) {
+      clearTimeout(cancelTimeout);
+      cancelTimeout = undefined;
+      this.cancelTimeoutTime = 0;
+    }
+
     this.warningIndex++;
-    if (this.warningIndex >= warningTexts.length) {
+    if (this.warningIndex >= warningTexts.length - 1) {
       this.scriptWarningFinished = true;
       $app.getImports().memory.scriptWarningFinished = true;
       $app.getImports().memory.save("scriptWarningFinished");
-      return;
     }
 
     this.nextWarning();

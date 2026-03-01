@@ -15,8 +15,8 @@
     <!-- text -->
     <list-item style="width: {{uiSizes.screenWidth}}px; height: 276px; flex-direction: column; align-items: center;">
       <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px; text-align: center;">{{warningText}}</text>
-      <text on:click="onGoBackClick" class="ui-btn"
-        style="margin-top: 24px;">取消</text>
+      <text on:click="onGoBackClick" class="ui-btn" style="margin-top: 24px;">取消{{cancelTimeoutTime > 0 ? ("（" +
+        cancelTimeoutTime + "）") : ""}}</text>
       <text on:click="onContinueClick" on:swipe="onContinueSwipe" class="ui-btn"
         style="background-color: #e84026; opacity: {{continueTimeoutTime ? 0.75 : 1}};">继续{{scriptWarningFinished ?
         "﹥﹥﹥" : (continueTimeoutTime > 0 ? ("（" + continueTimeoutTime + "）") : "")}}</text>
