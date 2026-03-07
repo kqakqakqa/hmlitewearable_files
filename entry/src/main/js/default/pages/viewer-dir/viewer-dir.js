@@ -63,10 +63,12 @@ export default {
           const fileExt = fileExtsLen > 1 ? fileExts[fileExtsLen - 1].toLowerCase() : "";
           const fileSubExt = fileExtsLen > 2 ? fileExts[fileExtsLen - 2].toLowerCase() : "";
 
-          // no ext, json
+          // no ext
           if (fileExtsLen <= 1 ||
-            fileExt == "json" ||
-            fileSubExt == "json"
+            (fileExtsLen === 2 &&
+              fileExt == "mp3" ||
+              fileExt == "flac"
+            )
           ) {
             return $app.getImports().router.replace({ uri: "pages/viewer-dir/viewer-dir-options/viewer-dir-options" });
           }

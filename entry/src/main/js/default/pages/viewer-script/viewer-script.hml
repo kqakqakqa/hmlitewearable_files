@@ -22,18 +22,22 @@
       </stack>
     </list-item>
 
-    <!-- description -->
-    <list-item if="{{errMessage === ''}}" class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 252px;">
+    <!-- preview -->
+    <list-item if="{{errMessage === ''}}" class="main-card-wrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: 252px;">
       <div class="main-card" style="width: {{uiSizes.uiWidth}}px; height: 240px;">
-        <text class="main-card-title">描述</text>
-        <div style="width: {{uiSizes.uiWidth}}px; height: 180px; padding-left: 24px; background-color: transparent;">
-          <text style="width: {{uiSizes.uiWidth - 48}}px; font-size: 30px;">{{description}}</text>
-        </div>
+        <text class="main-card-title">预览</text>
+        <list style="width: {{uiSizes.uiWidth - 48}}px; height: 180px; margin-left: 24px; background-color: transparent;">
+          <list-item style="width: {{uiSizes.uiWidth - 48}}px; height: 640px; background-color: transparent;">
+            <text style="width: {{uiSizes.uiWidth - 48}}px; height: 640px; text-overflow: ellipsis; font-size: 30px;">{{preview}}</text>
+          </list-item>
+        </list>
       </div>
     </list-item>
 
     <!-- viewText -->
-    <list-item if="{{errMessage === ''}}" class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 96px;">
+    <list-item if="{{errMessage === ''}}" class="main-card-wrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: 96px;">
       <div on:click="onViewTextClick" class="main-card"
         style="width: {{uiSizes.uiWidth}}px; height: 84px; flex-direction: row; justify-content: space-between;">
         <text class="main-card-title">阅读脚本</text>
@@ -42,7 +46,8 @@
     </list-item>
 
     <!-- run btn -->
-    <list-item if="{{errMessage === ''}}" class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 96px;">
+    <list-item if="{{errMessage === ''}}" class="main-card-wrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: 96px;">
       <div on:click="onRunClick" class="main-card"
         style="width: {{uiSizes.uiWidth}}px; height: 84px; flex-direction: row; justify-content: space-between;">
         <text class="main-card-title">运行</text>
@@ -51,7 +56,8 @@
     </list-item>
 
     <!-- error -->
-    <list-item if="{{errMessage !== ''}}" class="main-card-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 180px;">
+    <list-item if="{{errMessage !== ''}}" class="main-card-wrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: 180px;">
       <div style="width: {{uiSizes.uiWidth}}px; height: 180px;">
         <text style="width: {{uiSizes.uiWidth}}px; font-size: 30px;">{{errMessage}}</text>
       </div>

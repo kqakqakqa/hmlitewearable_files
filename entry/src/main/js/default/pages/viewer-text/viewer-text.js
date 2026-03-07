@@ -4,9 +4,13 @@ const maxLines = getMaxLines($app.getImports().uiSizes.uiHeight, $app.getImports
 const maxCharsInLine = getMaxCharsInLine($app.getImports().uiSizes.uiWidth, $app.getImports().memory.fontSize);
 const maxBytes = 512;
 
+const uriPath = "internal://app" + $app.getImports().memory.paths.join("");
+const viewTextHistory = $app.getImports().memory.viewTextHistory;
+
+const autoPagerSpeed = $app.getImports().memory.autoPagerSpeed;
+
 let fileLen = 0;
 let pageLen = 0;
-let uriPath;
 let openPosition = 0;
 
 export default {
@@ -20,21 +24,36 @@ export default {
     hasPrev: false,
     hasNext: true,
     showTitle: true,
+
+    hints: [],
+    hint: "",
     failData: "",
+
+    autoPager: null,
+    autoPagerDirection: "",
 
     bgColor: $app.getImports().memory.bgColor,
     textColor: $app.getImports().memory.textColor,
     fontSize: $app.getImports().memory.fontSize,
-    turnPageSpeed: $app.getImports().memory.turnPageSpeed,
   },
   onInit() {
-    uriPath = "internal://app" + $app.getImports().memory.paths.join("");
+    for (let i = 0; i < viewTextHistory.length; i++) {
+      if (viewTextHistory[i].uri === uriPath) {
+        this.showHint("已定位到上次的位置");
+        setTimeout(() => { this.hideHint("已定位到上次的位置"); }, 3000);
+        openPosition = viewTextHistory[i].position;
+        break;
+      }
+    }
+
     $app.getImports().headerTimeBattery.subscribe(() => {
       this.timeBatteryStr = $app.getImports().headerTimeBattery.time + "  " + $app.getImports().headerTimeBattery.battery;
     });
+
     $app.getImports().brightness.setKeepScreenOn({
       keepScreenOn: true,
     });
+
     $app.getImports().file.get({
       uri: uriPath,
       fail: (data, code) => { this.showFailData(data + " (when get file len)", code); },
@@ -44,6 +63,9 @@ export default {
         this.readPage("next");
       },
     });
+  },
+  onHide() {
+    this.stopAutoPager();
   },
   onDestroy() {
     $app.getImports().brightness.setKeepScreenOn({
@@ -117,6 +139,8 @@ export default {
                       !this.hasNext ? "100" :
                         !this.hasPrev ? "0" :
                           (openPosition / fileLen * 100).toFixed(2);
+
+                    saveViewTextHistory();
                   }
                 });
               },
@@ -159,6 +183,17 @@ export default {
       pageLen += getByteLen(char);
     }
   },
+  showHint(content) {
+    this.hints.push(content);
+    this.hint = content;
+  },
+  hideHint(content) {
+    const index = this.hints.indexOf(content);
+    if (index !== -1) {
+      this.hints.splice(index, 1);
+    }
+    this.hint = (this.hints.length === 0) ? "" : this.hints[this.hints.length - 1].text;
+  },
   showFailData(data, code = undefined) {
     this.failData = code + " " + data;
   },
@@ -172,9 +207,42 @@ export default {
   },
   onPrevPageClick() {
     this.readPage("prev");
+    this.stopAutoPager();
   },
   onNextPageClick() {
     this.readPage("next");
+    this.stopAutoPager();
+  },
+  onNextPageLongPress() {
+    this.startAutoPager("next");
+  },
+  onPrevPageLongPress() {
+    this.startAutoPager("prev");
+  },
+  startAutoPager(direction) {
+    if (this.autoPager) return;
+    this.autoPager = setInterval(() => {
+      this.readPage(direction);
+    }, autoPagerSpeed * 1000);
+
+    this.showHint("已开启自动翻页");
+    setTimeout(() => { this.hideHint("已开启自动翻页"); }, 1000);
+
+    this.autoPagerDirection = direction;
+
+    $app.getImports().vibrator.vibrate({ mode: 'short' });
+  },
+  stopAutoPager() {
+    if (!this.autoPager) return;
+    clearInterval(this.autoPager);
+    this.autoPager = null;
+
+    this.showHint("已停止自动翻页");
+    setTimeout(() => { this.hideHint("已停止自动翻页"); }, 1000);
+
+    this.autoPagerDirection = "";
+
+    $app.getImports().vibrator.vibrate({ mode: 'short' });
   },
   onPageSwipe(data) {
     switch (data.direction) {
@@ -316,4 +384,31 @@ function findValidUTF8Range(bytes) {
     first || 0,
     (last - first) || bytes.length
   ];
+}
+
+function saveViewTextHistory() {
+  let index = -1;
+
+  for (let i = 0; i < viewTextHistory.length; i++) {
+    if (viewTextHistory[i].uri === uriPath) {
+      index = i;
+      break;
+    }
+  }
+
+  if (index !== -1) {
+    viewTextHistory.splice(index, 1);
+  }
+
+  if (openPosition !== 0) {
+    viewTextHistory.unshift({
+      uri: uriPath,
+      position: openPosition
+    });
+  }
+
+  if (viewTextHistory.length > 10) viewTextHistory.length = 10;
+
+  $app.getImports().memory.viewTextHistory = viewTextHistory;
+  $app.getImports().memory.save("viewTextHistory");
 }

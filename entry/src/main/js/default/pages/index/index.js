@@ -27,7 +27,7 @@ function initImports(onAllDone) {
     const key = keys[idx++];
     console.info("init " + key);
 
-    if (imports[key].init) {
+    if (imports[key] && imports[key].init) {
       let done = false;
 
       const timer = setTimeout(() => {

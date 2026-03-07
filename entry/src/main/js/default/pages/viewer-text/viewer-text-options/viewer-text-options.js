@@ -6,7 +6,7 @@ export default {
     uiSizes: $app.getImports().uiSizes,
     theme: $app.getImports().memory.theme,
     fontSize: $app.getImports().memory.fontSize,
-    turnPageSpeed: $app.getImports().memory.turnPageSpeed,
+    autoPagerSpeed: $app.getImports().memory.autoPagerSpeed,
   },
   onInit() {
     $app.getImports().headerTimeBattery.subscribe(() => {
@@ -67,14 +67,14 @@ export default {
     $app.getImports().memory.save("bgColor");
     $app.getImports().memory.save("textColor");
   },
-  turnPageSpeedDown() {
-    this.turnPageSpeed = Math.max(1, this.turnPageSpeed - 1);
-    $app.getImports().memory.turnPageSpeed = this.turnPageSpeed;
-    $app.getImports().memory.save("turnPageSpeed");
+  autoPagerSpeedDown() {
+    this.autoPagerSpeed = Math.max(1, this.autoPagerSpeed - 1);
+    $app.getImports().memory.autoPagerSpeed = this.autoPagerSpeed;
+    $app.getImports().memory.save("autoPagerSpeed");
   },
-  turnPageSpeedUp() {
-    this.turnPageSpeed = Math.min(30, this.turnPageSpeed + 1);
-    $app.getImports().memory.turnPageSpeed = this.turnPageSpeed;
-    $app.getImports().memory.save("turnPageSpeed");
+  autoPagerSpeedUp() {
+    this.autoPagerSpeed = Math.min(30, this.autoPagerSpeed + 1);
+    $app.getImports().memory.autoPagerSpeed = this.autoPagerSpeed;
+    $app.getImports().memory.save("autoPagerSpeed");
   },
 }

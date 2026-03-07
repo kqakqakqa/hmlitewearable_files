@@ -12,7 +12,7 @@ import router from "./router.js";
 // import sensor from "@system.sensor";
 import storage from "@system.storage";
 // import storage from "./storage.js";
-// import vibrator from "@system.vibrator";
+import vibrator from "@system.vibrator";
 
 import appName from "./appName.js";
 import bundleName from "./bundleName.js";
@@ -33,7 +33,7 @@ const imports = {
   router: router,
   // sensor: sensor,
   storage: storage,
-  // vibrator: vibrator,
+  vibrator: vibrator,
 
   appName: appName,
   bundleName: bundleName,

@@ -9,11 +9,13 @@ const defaults = {
   paths: [],
   position: 0,
 
+  viewTextHistory: [],
+
   theme: "纯黑",
   bgColor: "#000",
   textColor: "#fff",
   fontSize: "30px",
-  turnPageSpeed: 5,
+  autoPagerSpeed: 5,
 
   scriptWarningFinished: false,
 };
@@ -33,32 +35,35 @@ function init(onDone) {
 }
 
 function load(key, then) {
-  $app.getImports().storage.get({
-    key: key,
-    default: "",
-    success: v => {
-      if (v === "") {
-        console.info("storage.get " + key + " not exist");
-        _this[key] = defaults[key];
-      } else {
-        console.info("storage.get " + key + " success, value=" + v);
-        const parsed = JSON.parse(v);
-        _this[key] = parsed;
-      }
-
+  $app.getImports().file.readText({
+    uri: `internal://app/kvstore/${key}`,
+    fail: (data, code) => {
+      console.info(`file.readText ${key} not exist`);
+      _this[key] = defaults[key];
+    },
+    success: d => {
+      console.info(`file.readText ${key} success`);
+      _this[key] = JSON.parse(d.text);
+    },
+    complete: () => {
       return then && then(_this[key]);
     },
   });
 }
 
 function save(key, then) {
-  $app.getImports().storage.set({
-    key: key,
-    value: JSON.stringify(_this[key]),
-    success: () => {
-      console.info(`storage.set ${key} success`);
-      if (then) return then(_this[key]);
+  $app.getImports().file.writeText({
+    uri: `internal://app/kvstore/${key}`,
+    text: JSON.stringify(_this[key]),
+    fail: (data, code) => {
+      console.error(`file.writeText ${key} failed: ${code} ${data}`);
     },
+    success: () => {
+      console.info(`file.writeText ${key} success`);
+    },
+    complete: () => {
+      return then && then(_this[key]);
+    }
   });
 }
 

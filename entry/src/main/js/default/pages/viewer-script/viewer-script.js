@@ -4,7 +4,7 @@ export default {
   data: {
     uiSizes: $app.getImports().uiSizes,
     timeBatteryStr: "",
-    description: "",
+    preview: "",
     errMessage: "",
   },
   onInit() {
@@ -19,18 +19,8 @@ export default {
         console.error(this.errMessage);
       },
       success: d => {
-        try {
-          const script = JSON.parse(d.text);
-          if (script && script.description) {
-            this.description = script.description;
-          } else {
-            this.errMessage = "脚本格式不正确: 缺少 description";
-            console.warn(this.errMessage);
-          }
-        } catch (e) {
-          this.errMessage = "JSON 解析失败: " + e.message;
-          console.warn(this.errMessage);
-        }
+        const text = d.text.split("\r\n").join("\n");
+        this.preview = text.slice(64) + ((text.length > 64) ? "...（共" + text.length + "字符）" : "");
       },
     });
   },
