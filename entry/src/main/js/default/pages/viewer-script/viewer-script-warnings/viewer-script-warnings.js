@@ -1,4 +1,4 @@
-console.info("pages/viewer-dir/viewer-dir-options/viewer-dir-options onInit");
+console.info("pages/viewer-script/viewer-script-warnings/viewer-script-warnings onInit");
 
 const warningTexts = [
   "你正在运行自定义脚本。",

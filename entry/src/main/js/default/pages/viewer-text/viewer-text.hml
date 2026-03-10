@@ -17,9 +17,9 @@
     <div
       style="width: {{uiSizes.isCircle ? uiSizes.screenWidth : uiSizes.uiWidth}}px; height: 36px; justify-content: space-between; align-items: center; background-color: transparent;">
       <text style="font-size: 30px; color: gray;">{{hasPrev ? (autoPagerDirection === "" ? " ﹤" : (autoPagerDirection
-        === "prev" ? " ﹤﹤" : " 自动")) : ""}}</text>
+        === "prev" ? " ﹤﹤" : "")) : ""}}</text>
       <text style="font-size: 30px; color: gray;">{{hasNext ? (autoPagerDirection === "" ? "﹥ " : (autoPagerDirection
-        === "next" ? "﹥﹥ " : "自动 ")) : ""}}</text>
+        === "next" ? "﹥﹥ " : "")) : ""}}</text>
     </div>
   </div>
 

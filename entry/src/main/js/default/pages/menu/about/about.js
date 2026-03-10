@@ -3,7 +3,6 @@ console.info("pages/menu/about/about onInit");
 export default {
   data: {
     uiSizes: $app.getImports().uiSizes,
-    appName: $app.getImports().appName.appName,
     versionName: $app.getImports().app.getInfo().versionName,
   },
   onInit() { },

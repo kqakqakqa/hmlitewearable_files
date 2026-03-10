@@ -14,7 +14,7 @@ import storage from "@system.storage";
 // import storage from "./storage.js";
 import vibrator from "@system.vibrator";
 
-import appName from "./appName.js";
+// import appName from "./appName.js";
 import bundleName from "./bundleName.js";
 // import headerBar from "./headerBar.js";
 import headerTimeBattery from "./headerTimeBattery.js";
@@ -35,7 +35,7 @@ const imports = {
   storage: storage,
   vibrator: vibrator,
 
-  appName: appName,
+  // appName: appName,
   bundleName: bundleName,
   // headerBar: headerBar,
   headerTimeBattery: headerTimeBattery,

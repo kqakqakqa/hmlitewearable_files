@@ -1,4 +1,4 @@
-console.info("pages/viewer-dir/viewer-dir-options/viewer-dir-options onInit");
+console.info("pages/viewer-text/viewer-text-options/viewer-text-options onInit");
 
 export default {
   data: {

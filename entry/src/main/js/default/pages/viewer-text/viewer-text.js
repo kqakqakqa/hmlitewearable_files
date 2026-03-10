@@ -13,6 +13,8 @@ let fileLen = 0;
 let pageLen = 0;
 let openPosition = 0;
 
+let autoPager;
+
 export default {
   data: {
     uiSizes: $app.getImports().uiSizes,
@@ -29,7 +31,6 @@ export default {
     hint: "",
     failData: "",
 
-    autoPager: null,
     autoPagerDirection: "",
 
     bgColor: $app.getImports().memory.bgColor,
@@ -76,8 +77,10 @@ export default {
   readPage(direction) {
     console.log("old position: " + openPosition + "/" + fileLen);
     console.log("readPage: " + direction);
+
     const oldPosition = openPosition;
     let readLen;
+
     if (direction == "prev") {
       if (!this.hasPrev) return;
       openPosition = Math.max(openPosition - maxBytes, 0);
@@ -88,8 +91,10 @@ export default {
       if (openPosition >= fileLen) openPosition = oldPosition;
       readLen = maxBytes;
     }
+
     console.log("read position: " + openPosition + "/" + fileLen);
     console.log("readLen: " + readLen);
+
     $app.getImports().file.readText({
       uri: uriPath,
       position: openPosition,
@@ -97,56 +102,64 @@ export default {
       fail: (data, code) => { this.showFailData(data + " (when read file text)", code); },
       success: d => {
 
-        $app.getImports().file.writeText({
-          uri: "internal://app/viewer-text-temp",
-          text: d.text,
-          fail: (data, code) => { this.showFailData(data + " (when write page temp)", code); },
-          success: () => {
+        setTimeout(() => {
+          $app.getImports().file.writeText({
+            uri: "internal://app/viewer-text-temp",
+            text: d.text,
+            fail: (data, code) => { this.showFailData(data + " (when write page temp)", code); },
+            success: () => {
 
-            $app.getImports().file.readArrayBuffer({
-              uri: "internal://app/viewer-text-temp",
-              fail: (data, code) => { this.showFailData(data + " (when read page temp arrayBuffer)", code); },
-              success: d => {
-                const range = findValidUTF8Range(d.buffer);
-
-                $app.getImports().file.readText({
+              setTimeout(() => {
+                $app.getImports().file.readArrayBuffer({
                   uri: "internal://app/viewer-text-temp",
-                  position: range[0],
-                  length: range[1],
-                  fail: (data, code) => { this.showFailData(data + " (when read temp text)", code); },
+                  fail: (data, code) => { this.showFailData(data + " (when read page temp arrayBuffer)", code); },
                   success: d => {
-                    this.failData = "";
-                    const text = d.text;
-                    if (direction == "prev") {
-                      this.sliceToPage(text.split("").reverse().join(""));
-                      this.page = this.page.split("").reverse().join("");
-                      openPosition = oldPosition - pageLen;
-                      // if (openPosition > 0 && openPosition < 3) { // bug fix
-                      //   openPosition = 0;
-                      //   pageLen = 0;
-                      //   return this.readPage("next");
-                      // }
-                    } else if (direction == "next") {
-                      this.sliceToPage(text);
-                    }
-                    // console.warn(`read: ${JSON.stringify(text)} (${readLen}), sliced: ${JSON.stringify(this.page)} (${pageLen})`);
-                    console.log("new position: " + openPosition + "/" + fileLen);
-                    console.log("pageLen: " + pageLen);
-                    this.textLines = this.page.split("\n");
-                    this.hasNext = openPosition + pageLen < fileLen - 1; // bug fix
-                    this.hasPrev = openPosition > 0 + 1; // bug fix
-                    this.progress = (!this.hasNext && !this.hasPrev) ? "--" :
-                      !this.hasNext ? "100" :
-                        !this.hasPrev ? "0" :
-                          (openPosition / fileLen * 100).toFixed(2);
+                    const range = findValidUTF8Range(d.buffer);
 
-                    saveViewTextHistory();
-                  }
+                    setTimeout(() => {
+                      $app.getImports().file.readText({
+                        uri: "internal://app/viewer-text-temp",
+                        position: range[0],
+                        length: range[1],
+                        fail: (data, code) => { this.showFailData(data + " (when read temp text)", code); },
+                        success: d => {
+
+                          this.failData = "";
+                          const text = d.text;
+                          if (direction == "prev") {
+                            this.sliceToPage(text.split("").reverse().join(""));
+                            this.page = this.page.split("").reverse().join("");
+                            openPosition = oldPosition - pageLen;
+                            // if (openPosition > 0 && openPosition < 3) { // bug fix
+                            //   openPosition = 0;
+                            //   pageLen = 0;
+                            //   return this.readPage("next");
+                            // }
+                          } else if (direction == "next") {
+                            this.sliceToPage(text);
+                          }
+                          // console.warn(`read: ${JSON.stringify(text)} (${readLen}), sliced: ${JSON.stringify(this.page)} (${pageLen})`);
+                          console.log("new position: " + openPosition + "/" + fileLen);
+                          console.log("pageLen: " + pageLen);
+                          this.textLines = this.page.split("\n");
+                          this.hasNext = openPosition + pageLen < fileLen - 1; // bug fix
+                          this.hasPrev = openPosition > 0 + 1; // bug fix
+                          this.progress = (!this.hasNext && !this.hasPrev) ? "--" :
+                            !this.hasNext ? "100" :
+                              !this.hasPrev ? "0" :
+                                (openPosition / fileLen * 100).toFixed(2);
+
+                          saveViewTextHistory();
+
+                        }
+                      });
+                    }, 0);
+                  },
                 });
-              },
-            });
-          }
-        });
+              }, 0);
+            }
+          });
+        }, 0);
       },
     });
   },
@@ -220,8 +233,8 @@ export default {
     this.startAutoPager("prev");
   },
   startAutoPager(direction) {
-    if (this.autoPager) return;
-    this.autoPager = setInterval(() => {
+    if (autoPager) return;
+    autoPager = setInterval(() => {
       this.readPage(direction);
     }, autoPagerSpeed * 1000);
 
@@ -233,9 +246,9 @@ export default {
     $app.getImports().vibrator.vibrate({ mode: 'short' });
   },
   stopAutoPager() {
-    if (!this.autoPager) return;
-    clearInterval(this.autoPager);
-    this.autoPager = null;
+    if (!autoPager) return;
+    clearInterval(autoPager);
+    autoPager = null;
 
     this.showHint("已停止自动翻页");
     setTimeout(() => { this.hideHint("已停止自动翻页"); }, 1000);

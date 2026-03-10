@@ -1,4 +1,4 @@
-console.info("pages/viewer-dir/viewer-dir-options/viewer-dir-options onInit");
+console.info("pages/viewer-script/viewer-script-run/viewer-script-run onInit");
 
 let _this;
 let userScript = "";

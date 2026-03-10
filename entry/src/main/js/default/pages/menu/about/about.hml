@@ -1,5 +1,5 @@
 <div on:swipe="swipeBack" style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px; align-items: center; justify-content: center; flex-direction: column;">
   <image src="/common/icon.png" style="width: 114px; height: 114px; margin-bottom: 12px;"></image>
-  <text style="font-size: 30px;">{{appName}}</text>
+  <text style="font-size: 30px;">文件</text>
   <text style="margin-bottom: 12px; color: darkgrey;">v{{versionName}}</text>
 </div>
