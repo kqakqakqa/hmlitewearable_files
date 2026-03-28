@@ -1,5 +1,7 @@
 console.info("pages/viewer-text/viewer-text onInit");
 
+const file = $app.getImports().file;
+
 const maxLines = getMaxLines($app.getImports().uiSizes.uiHeight, $app.getImports().memory.fontSize);
 const maxCharsInLine = getMaxCharsInLine($app.getImports().uiSizes.uiWidth, $app.getImports().memory.fontSize);
 const maxBytes = 512;
@@ -9,20 +11,21 @@ const viewTextHistory = $app.getImports().memory.viewTextHistory;
 
 const autoPagerSpeed = $app.getImports().memory.autoPagerSpeed;
 
-let fileLen = 0;
+let fileSize = 0;
+let fileEndPos = 0;
 let pageLen = 0;
-let openPosition = 0;
+let openPos = 0;
 
 let autoPager;
 
 export default {
+
   data: {
     uiSizes: $app.getImports().uiSizes,
     timeBatteryStr: "",
     fileName: $app.getImports().memory.paths[$app.getImports().memory.paths.length - 1].split("/")[1],
     page: "",
-    textLines: [],
-    progress: "",
+    progress: "--",
     hasPrev: false,
     hasNext: true,
     showTitle: true,
@@ -31,18 +34,19 @@ export default {
     hint: "",
     failData: "",
 
-    autoPagerDirection: "",
+    autoPagerDirection: 0,
 
     bgColor: $app.getImports().memory.bgColor,
     textColor: $app.getImports().memory.textColor,
     fontSize: $app.getImports().memory.fontSize,
   },
+
   onInit() {
     for (let i = 0; i < viewTextHistory.length; i++) {
       if (viewTextHistory[i].uri === uriPath) {
         this.showHint("已定位到上次的位置");
         setTimeout(() => { this.hideHint("已定位到上次的位置"); }, 3000);
-        openPosition = viewTextHistory[i].position;
+        openPos = viewTextHistory[i].position;
         break;
       }
     }
@@ -55,151 +59,203 @@ export default {
       keepScreenOn: true,
     });
 
-    $app.getImports().file.get({
+    file.get({
       uri: uriPath,
       fail: (data, code) => { this.showFailData(data + " (when get file len)", code); },
       success: f => {
-        fileLen = f.length;
-        // if (fileLen === 0) return this.showFailData("文件是空的", "");
-        this.readPage("next");
+        fileSize = f.length;
+        fileEndPos = Math.max(fileSize - 1, 0);
+        this.readPage(true);
       },
     });
   },
+
   onHide() {
     this.stopAutoPager();
   },
+
   onDestroy() {
     $app.getImports().brightness.setKeepScreenOn({
       keepScreenOn: false,
     });
     $app.getImports().headerTimeBattery.subscribe(undefined);
   },
-  readPage(direction) {
-    console.log("old position: " + openPosition + "/" + fileLen);
-    console.log("readPage: " + direction);
 
-    const oldPosition = openPosition;
+  readPage(isForward = true) {
+    console.log("old pos: " + openPos + "/" + fileEndPos);
+    console.log("isForward: " + isForward);
+
+    const oldPos = openPos;
     let readLen;
 
-    if (direction == "prev") {
-      if (!this.hasPrev) return;
-      openPosition = Math.max(openPosition - maxBytes, 0);
-      readLen = oldPosition - openPosition;
-    } else if (direction == "next") {
+    if (isForward) {
       if (!this.hasNext) return;
-      openPosition += pageLen;
-      if (openPosition >= fileLen) openPosition = oldPosition;
-      readLen = maxBytes;
+
+      if (openPos + pageLen < fileEndPos) openPos = Math.min(Math.max(openPos + pageLen, 0), fileEndPos);
+      readLen = Math.min(Math.max(fileEndPos - openPos + 1, 0), maxBytes);
+
+    } else {
+      if (!this.hasPrev) return;
+
+      openPos = Math.min(Math.max(openPos - maxBytes, 0), fileEndPos);
+      readLen = Math.min(Math.max(oldPos - 1 - openPos + 1, 0), maxBytes);
+
     }
 
-    console.log("read position: " + openPosition + "/" + fileLen);
+    console.log("read pos: " + openPos + "/" + fileEndPos);
     console.log("readLen: " + readLen);
 
-    $app.getImports().file.readText({
+    this.readValidText(
+      openPos,
+      readLen,
+      d => {
+        const text = d.text;
+
+        if (isForward) {
+          this.sliceToPage(text, true);
+        } else {
+          this.sliceToPage(text, false);
+          openPos = oldPos - pageLen;
+        }
+
+        console.log("new pos: " + openPos + "/" + fileEndPos);
+        console.log("pageLen: " + pageLen);
+
+        this.failData = "";
+
+        this.hasNext = openPos + pageLen < fileEndPos;
+        this.hasPrev = openPos > 0;
+
+        this.progress = (!this.hasNext && !this.hasPrev) ? "--" :
+          !this.hasNext ? "100" :
+            !this.hasPrev ? "0" :
+              (openPos / fileEndPos * 100).toFixed(2);
+
+        saveViewTextHistory();
+
+      }
+    );
+
+  },
+
+  readValidText(pos, len, success) {
+    this.safeReadArrayBuffer(
+      pos,
+      4,
+      d => {
+        const offHead = findValidUTF8Pos(d.buffer, true);
+        const posHead = pos + offHead;
+
+        const offFindTail = Math.max(pos + len - 4, pos);
+
+        this.safeReadArrayBuffer(
+          offFindTail,
+          4,
+          d => {
+            const offTail = findValidUTF8Pos(d.buffer, false);
+
+            setTimeout(() => {
+              file.readText({
+                uri: uriPath,
+                position: posHead,
+                length: offFindTail + offTail - posHead + 1,
+                fail: (data, code) => { this.showFailData(data + " (when read text)", code); },
+                success: success,
+
+              });
+            }, 0);
+          }
+        );
+      }
+    );
+  },
+
+  safeReadArrayBuffer(pos, len, success) {
+    const tempUri = "internal://app/viewer-text-temp";
+
+    setTimeout(() => file.readText({
       uri: uriPath,
-      position: openPosition,
-      length: readLen,
-      fail: (data, code) => { this.showFailData(data + " (when read file text)", code); },
+      position: pos,
+      length: len,
+      fail: (data, code) => this.showFailData(data + ` (when safeRead readText pos=${pos} len=${len})`, code),
       success: d => {
 
-        setTimeout(() => {
-          $app.getImports().file.writeText({
-            uri: "internal://app/viewer-text-temp",
-            text: d.text,
-            fail: (data, code) => { this.showFailData(data + " (when write page temp)", code); },
-            success: () => {
+        setTimeout(() => file.writeText({
+          uri: tempUri,
+          text: d.text,
+          fail: (data, code) => this.showFailData(data + ` (when safeRead writeText pos=${pos} len=${len})`, code),
+          success: () => {
 
-              setTimeout(() => {
-                $app.getImports().file.readArrayBuffer({
-                  uri: "internal://app/viewer-text-temp",
-                  fail: (data, code) => { this.showFailData(data + " (when read page temp arrayBuffer)", code); },
-                  success: d => {
-                    const range = findValidUTF8Range(d.buffer);
+            setTimeout(() => file.readArrayBuffer({
+              uri: tempUri,
+              fail: (data, code) => this.showFailData(data + ` (when safeRead readBuf pos=${pos} len=${len})`, code),
+              success: success
 
-                    setTimeout(() => {
-                      $app.getImports().file.readText({
-                        uri: "internal://app/viewer-text-temp",
-                        position: range[0],
-                        length: range[1],
-                        fail: (data, code) => { this.showFailData(data + " (when read temp text)", code); },
-                        success: d => {
-
-                          this.failData = "";
-                          const text = d.text;
-                          if (direction == "prev") {
-                            this.sliceToPage(text.split("").reverse().join(""));
-                            this.page = this.page.split("").reverse().join("");
-                            openPosition = oldPosition - pageLen;
-                            // if (openPosition > 0 && openPosition < 3) { // bug fix
-                            //   openPosition = 0;
-                            //   pageLen = 0;
-                            //   return this.readPage("next");
-                            // }
-                          } else if (direction == "next") {
-                            this.sliceToPage(text);
-                          }
-                          // console.warn(`read: ${JSON.stringify(text)} (${readLen}), sliced: ${JSON.stringify(this.page)} (${pageLen})`);
-                          console.log("new position: " + openPosition + "/" + fileLen);
-                          console.log("pageLen: " + pageLen);
-                          this.textLines = this.page.split("\n");
-                          this.hasNext = openPosition + pageLen < fileLen - 1; // bug fix
-                          this.hasPrev = openPosition > 0 + 1; // bug fix
-                          this.progress = (!this.hasNext && !this.hasPrev) ? "--" :
-                            !this.hasNext ? "100" :
-                              !this.hasPrev ? "0" :
-                                (openPosition / fileLen * 100).toFixed(2);
-
-                          saveViewTextHistory();
-
-                        }
-                      });
-                    }, 0);
-                  },
-                });
-              }, 0);
-            }
-          });
-        }, 0);
-      },
-    });
+            }), 0);
+          }
+        }), 0);
+      }
+    }), 0);
   },
-  sliceToPage(str) {
+
+  sliceToPage(str, isForward = true) {
     this.page = "";
     let lineCount = 1;
     let charInLineCount = 0;
     pageLen = 0;
-    for (let i = 0; i < str.length; i++) {
+
+    const len = str.length;
+    const start = isForward ? 0 : len - 1;
+    const step = isForward ? 1 : -1;
+
+    let tempPage = [];
+
+    for (let s = 0; s < len; s++) {
+      const i = start + s * step;
+
       const char = str[i];
       const charWidth = estimateCharWidth(char);
-      charInLineCount += charWidth;
-      if (char == "\r") {
-        pageLen += getByteLen(char);
-        continue;
-      }
-      if (char == "\n") {
-        pageLen += getByteLen(char);
+
+      // 换行符
+      if (char === "\n") {
+        if (lineCount >= maxLines) break;
         lineCount++;
-        if (lineCount > maxLines) break;
-        this.page += "\n";
         charInLineCount = 0;
-        continue;
-      }
-      if (charInLineCount > maxCharsInLine) {
-        lineCount++;
-        if (lineCount > maxLines) break;
-        this.page += "\n" + char;
-        charInLineCount = charWidth;
+        tempPage.push(char);
         pageLen += getByteLen(char);
         continue;
       }
-      this.page += char;
+      if (char === "\r") {
+        pageLen += getByteLen(char);
+        continue;
+      }
+
+      // 行宽
+      if (charInLineCount + charWidth > maxCharsInLine) {
+        if (lineCount >= maxLines) break;
+        lineCount++;
+        charInLineCount = charWidth;
+        tempPage.push("\n", char);
+      } else {
+        charInLineCount += charWidth;
+        tempPage.push(char);
+      }
       pageLen += getByteLen(char);
     }
+
+    // 反向截取需要翻转还原
+    if (!isForward) {
+      tempPage.reverse();
+    }
+
+    this.page = tempPage.join("");
   },
+
   showHint(content) {
     this.hints.push(content);
     this.hint = content;
   },
+
   hideHint(content) {
     const index = this.hints.indexOf(content);
     if (index !== -1) {
@@ -207,44 +263,54 @@ export default {
     }
     this.hint = (this.hints.length === 0) ? "" : this.hints[this.hints.length - 1].text;
   },
+
   showFailData(data, code = undefined) {
     this.failData = code + " " + data;
   },
-  nullFn() { },
+
+  nullFn: void 0,
+
   onGoBackClick() {
     $app.getImports().memory.paths.pop();
     return $app.getImports().router.replace({ uri: "pages/viewer-dir/viewer-dir" });
   },
+
   onClick() {
     return $app.getImports().router.replace({ uri: "pages/viewer-text/viewer-text-options/viewer-text-options" });
   },
+
   onPrevPageClick() {
-    this.readPage("prev");
+    this.readPage(false);
     this.stopAutoPager();
   },
+
   onNextPageClick() {
-    this.readPage("next");
+    this.readPage(true);
     this.stopAutoPager();
   },
+
   onNextPageLongPress() {
-    this.startAutoPager("next");
+    this.startAutoPager(true);
   },
+
   onPrevPageLongPress() {
-    this.startAutoPager("prev");
+    this.startAutoPager(false);
   },
-  startAutoPager(direction) {
+
+  startAutoPager(isForward) {
     if (autoPager) return;
     autoPager = setInterval(() => {
-      this.readPage(direction);
+      this.readPage(isForward);
     }, autoPagerSpeed * 1000);
 
     this.showHint("已开启自动翻页");
     setTimeout(() => { this.hideHint("已开启自动翻页"); }, 1000);
 
-    this.autoPagerDirection = direction;
+    this.autoPagerDirection = isForward ? 1 : -1;
 
     $app.getImports().vibrator.vibrate({ mode: 'short' });
   },
+
   stopAutoPager() {
     if (!autoPager) return;
     clearInterval(autoPager);
@@ -253,10 +319,11 @@ export default {
     this.showHint("已停止自动翻页");
     setTimeout(() => { this.hideHint("已停止自动翻页"); }, 1000);
 
-    this.autoPagerDirection = "";
+    this.autoPagerDirection = 0;
 
     $app.getImports().vibrator.vibrate({ mode: 'short' });
   },
+
   onPageSwipe(data) {
     switch (data.direction) {
       case "up":
@@ -268,18 +335,20 @@ export default {
         this.showTitle = true;
         break;
       case "left":
-        this.readPage("next");
+        this.readPage(true);
         break;
       case "right":
-        this.readPage("prev");
+        this.readPage(false);
         break;
       default:
         break;
     }
   },
+
   onTitleClick() {
     this.showTitle = !this.showTitle;
   },
+
   onTitleSwipe(data) {
     switch (data.direction) {
       case "up":
@@ -361,42 +430,41 @@ function estimateCharWidth(char) {
   return 21 / 32;
 }
 
-function findValidUTF8Range(bytes) {
-  let first = null;
-  let last = null;
-  let i = 0;
+function findValidUTF8Pos(bytes, isForward = true) {
+  const len = bytes.length;
 
-  while (i < bytes.length) {
-    const b1 = bytes[i];
-    let len = 0;
+  if (isForward) {
 
-    if (b1 <= 0x7F) len = 1; // 1 字节
-    else if (b1 >= 0xC2 && b1 <= 0xDF) len = 2; // 2 字节
-    else if (b1 >= 0xE0 && b1 <= 0xEF) len = 3; // 3 字节
-    else if (b1 >= 0xF0 && b1 <= 0xF4) len = 4; // 4 字节
-    else { i++; continue; } // 非法起始字节
-
-    // 检查后续字节是否完整
-    let valid = true;
-    for (let j = 1; j < len; j++) {
-      if (i + j >= bytes.length || (bytes[i + j] & 0xC0) !== 0x80) {
-        valid = false;
-        break;
-      }
+    for (let i = 0; i < len; i++) {
+      // 00xxxxxx >> 6 = 0 (早期 ASCII 控制符)
+      // 01xxxxxx >> 6 = 1 (ASCII 或 合法)
+      // 10xxxxxx >> 6 = 2 (中途字节)
+      // 11xxxxxx >> 6 = 3 (多字节开头)
+      if ((bytes[i] >> 6) !== 2) return i;
     }
-    if (!valid) { i++; continue; }
+    return 0;
 
-    if (first === null) first = i; // 记录第一个合法字符偏移
-    last = i + len; // 更新最后一个完整字符的结束偏移
-    i += len;
+  } else {
+
+    for (let i = len - 1; i >= 0; i--) {
+      const b = bytes[i];
+
+      if ((b >> 6) === 2) continue;
+
+      // 11110xxx >= 0xf0 (4字节开头)
+      // 1110xxxx >= 0xe0 (3字节开头)
+      // 110xxxxx >= 0xc0 (2字节开头)
+      let charLen = 1;
+      if (b >= 0xf0) charLen = 4;
+      else if (b >= 0xe0) charLen = 3;
+      else if (b >= 0xc0) charLen = 2;
+
+      const validPos = i - 1 + charLen;
+      return (validPos > (len - 1)) ? i - 1 : validPos;
+    }
+    return len - 1;
+
   }
-
-  if (first === null || last === null) console.warn("cannot find valid UTF-8 range, first=" + first + ", last=" + last);
-
-  return [
-    first || 0,
-    (last - first) || bytes.length
-  ];
 }
 
 function saveViewTextHistory() {
@@ -413,10 +481,10 @@ function saveViewTextHistory() {
     viewTextHistory.splice(index, 1);
   }
 
-  if (openPosition !== 0) {
+  if (openPos !== 0) {
     viewTextHistory.unshift({
       uri: uriPath,
-      position: openPosition
+      position: openPos
     });
   }
 

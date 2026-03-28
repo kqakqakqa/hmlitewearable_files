@@ -7,8 +7,9 @@
 
   <!-- textLines -->
   <div
-    style="width: {{uiSizes.uiWidth}}px; height: {{uiSizes.uiHeight}}px; top: {{uiSizes.topMargin}}px; left: {{uiSizes.leftMargin}}px; flex-direction: column; background-color: transparent;">
-    <text for="{{textLines}}" style="font-size: {{fontSize}}; color: {{textColor}};">{{$item}}</text>
+    style="width: {{uiSizes.uiWidth}}px; height: {{uiSizes.uiHeight}}px; top: {{uiSizes.topMargin}}px; left: {{uiSizes.leftMargin}}px; flex-direction: column; background-color: transparent; align-items: center;">
+    <!-- <text for="{{textLines}}" style="font-size: {{fontSize}}; color: {{textColor}};">{{$item}}</text> -->
+    <text style="width: {{uiSizes.uiWidth}}px; font-size: {{fontSize}}; color: {{textColor}};">{{page}}</text>
   </div>
 
   <!-- prev next label -->
@@ -16,10 +17,10 @@
     style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.isCircle ? uiSizes.screenHeight : uiSizes.topMargin}}px; top: {{uiSizes.isCircle ? 0 : uiSizes.screenHeight - uiSizes.topMargin}}px; justify-content: center; align-items: center; background-color: transparent;">
     <div
       style="width: {{uiSizes.isCircle ? uiSizes.screenWidth : uiSizes.uiWidth}}px; height: 36px; justify-content: space-between; align-items: center; background-color: transparent;">
-      <text style="font-size: 30px; color: gray;">{{hasPrev ? (autoPagerDirection === "" ? " ﹤" : (autoPagerDirection
-        === "prev" ? " ﹤﹤" : "")) : ""}}</text>
-      <text style="font-size: 30px; color: gray;">{{hasNext ? (autoPagerDirection === "" ? "﹥ " : (autoPagerDirection
-        === "next" ? "﹥﹥ " : "")) : ""}}</text>
+      <text style="font-size: 30px; color: gray;">{{hasPrev ? (autoPagerDirection === 0 ? " ﹤" : (autoPagerDirection
+        === -1 ? " ﹤﹤" : "")) : ""}}</text>
+      <text style="font-size: 30px; color: gray;">{{hasNext ? (autoPagerDirection === 0 ? "﹥ " : (autoPagerDirection
+        === 1 ? "﹥﹥ " : "")) : ""}}</text>
     </div>
   </div>
 
