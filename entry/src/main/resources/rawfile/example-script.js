@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name         示例脚本 v2
-// @version      2
-// @description  这是一个示例脚本
+// @name         示例JS v3
+// @version      3
+// @description  这是一个示例JS
 // @author       -
 // ==/UserScript==
 
-console.log("正在运行 javascript");
+console.log("正在运行 JavaScript");
 
-file = requireNative("system.file");
+var file = requireNative("system.file");
 
 console.log("尝试写入");
 

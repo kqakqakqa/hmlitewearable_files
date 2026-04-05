@@ -4,7 +4,7 @@
     "vendor": "kqakqakqa",
     "version": {
       "code": 0,
-      "name": "1.15.20260329"
+      "name": "1.16.20260406"
     }
   },
   "deviceConfig": {},
@@ -31,16 +31,18 @@
           "pages/index/index",
           "pages/router/router",
           "pages/menu/menu",
-          "pages/menu/about/about",
-          "pages/menu/licenses/licenses",
-          "pages/viewer-dir/viewer-dir",
-          "pages/viewer-dir/viewer-dir-options/viewer-dir-options",
-          "pages/viewer-img/viewer-img",
-          "pages/viewer-text/viewer-text",
-          "pages/viewer-text/viewer-text-options/viewer-text-options",
-          "pages/viewer-script/viewer-script",
-          "pages/viewer-script/viewer-script-warnings/viewer-script-warnings",
-          "pages/viewer-script/viewer-script-run/viewer-script-run"
+          "pages/menu_about/menu_about",
+          "pages/menu_licenses/menu_licenses",
+          "pages/menu_sponsor/menu_sponsor",
+          "pages/files_index/files_index",
+          "pages/viewer_dir/viewer_dir",
+          "pages/viewer_dir_options/viewer_dir_options",
+          "pages/viewer_img/viewer_img",
+          "pages/viewer_text/viewer_text",
+          "pages/viewer_text_options/viewer_text_options",
+          "pages/viewer_script/viewer_script",
+          "pages/viewer_script_warnings/viewer_script_warnings",
+          "pages/viewer_script_run/viewer_script_run"
         ],
         "name": "default"
       }

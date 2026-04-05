@@ -1,0 +1,62 @@
+<div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="bindRotation" on:swipe="swipeBack"
+    style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+
+    <!-- timeBattery -->
+    <list-item class="timeBatteryWrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px;">
+      <text class="text-30px timeBatteryStr">{{timeBatteryStr}}</text>
+    </list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+        <text class="text-38px title-text">文件</text>
+      </stack>
+    </list-item>
+
+    <list-item class="icon-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div on:click="viewDir('recent')" class="icon-btnCard" style="width: {{uiSizes.uiWidth}}px;">
+        <div class="icon-btnCard-left" style="width: {{uiSizes.uiWidth - 78}}px;">
+          <image class="icon-btnCard-icon" src="/common/arrow_counterclockwise_clock-48px.png"></image>
+          <text class="text-30px icon-btnCard-title">最近</text>
+        </div>
+        <image class="text-btnCard-go-icon" src="/common/chevron_right-30px-gray.png"></image>
+      </div>
+    </list-item>
+
+    <list-item class="icon-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div on:click="viewDir('favorite')" class="icon-btnCard" style="width: {{uiSizes.uiWidth}}px;">
+        <div class="icon-btnCard-left" style="width: {{uiSizes.uiWidth - 78}}px;">
+          <image class="icon-btnCard-icon" src="/common/star_badge_list-48px.png"></image>
+          <text class="text-30px icon-btnCard-title">收藏</text>
+        </div>
+        <image class="text-btnCard-go-icon" src="/common/chevron_right-30px-gray.png"></image>
+      </div>
+    </list-item>
+
+    <list-item class="icon-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div on:click="viewDir('dir')" class="icon-btnCard" style="width: {{uiSizes.uiWidth}}px;">
+        <div class="icon-btnCard-left" style="width: {{uiSizes.uiWidth - 78}}px;">
+          <image class="icon-btnCard-icon" src="/common/folder-48px.png"></image>
+          <text class="text-30px icon-btnCard-title">浏览</text>
+        </div>
+        <image class="text-btnCard-go-icon" src="/common/chevron_right-30px-gray.png"></image>
+      </div>
+    </list-item>
+
+    <list-item class="icon-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div on:click="pageTo('menu')" class="icon-btnCard" style="width: {{uiSizes.uiWidth}}px;">
+        <div class="icon-btnCard-left" style="width: {{uiSizes.uiWidth - 78}}px;">
+          <image class="icon-btnCard-icon" src="/common/dot_grid_2x2-48px.png"></image>
+          <text class="text-30px icon-btnCard-title">选项</text>
+        </div>
+        <image class="text-btnCard-go-icon" src="/common/chevron_right-30px-gray.png"></image>
+        </image>
+      </div>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px; background-color: transparent;"></list-item>
+
+  </list>
+</div>

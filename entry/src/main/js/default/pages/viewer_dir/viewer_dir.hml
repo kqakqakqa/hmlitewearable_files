@@ -1,0 +1,102 @@
+<div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="bindRotation" on:swipe="swipeBack"
+    style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+
+    <!-- timeBattery -->
+    <list-item class="timeBatteryWrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px;">
+      <text class="text-30px timeBatteryStr">{{timeBatteryStr}}</text>
+    </list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+
+        <text class="text-38px title-text">
+          {{mode === "dir" ? "浏览" : (mode === "recent" ? "最近" : (mode === "favorite" ? "收藏" : ""))}}
+        </text>
+
+        <div if="{{mode === 'dir' || mode === 'recent'}}" on:click="clickGoParent_DelRecent" class="ui-round-btn"
+          style="left: {{uiSizes.uiWidth - 156}}px;">
+          <image style="width: 36px; height: 36px;"
+            src="{{(mode === 'dir' && '/common/arrow_up-36px.png') || (mode === 'recent' && '/common/trash-36px.png')}}">
+          </image>
+        </div>
+
+        <div on:click="clickBack_Options" class="ui-round-btn" style="left: {{uiSizes.uiWidth - 72}}px;">
+          <image style="width: 36px; height: 36px;"
+            src="{{viewPath ? '/common/arrow_left-36px.png' : '/common/dot_grid_2x2-36px.png'}}"></image>
+        </div>
+
+      </stack>
+    </list-item>
+
+    <!-- path -->
+    <list-item if="{{mode === 'dir'}}" class="text-btnCard-wrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: 91px;">
+      <div class="text-btnCard" style="width: {{uiSizes.uiWidth}}px; height: 79px;">
+        <text style="width: {{uiSizes.uiWidth - 48}}px; font-size: 30px;">
+          {{viewPath || "internal://app"}}
+        </text>
+      </div>
+    </list-item>
+
+    <!-- fail data -->
+    <list-item if="{{!!failData}}" class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div class="text-btnCard" style="width: {{uiSizes.uiWidth}}px; background-color: #600;">
+        <text style="width: {{uiSizes.uiWidth - 48}}px; font-size: 30px;">
+          {{failData}}
+        </text>
+      </div>
+    </list-item>
+
+    <!-- prev next 1 -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 84px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+
+        <text class="text-30px title-text">{{showPosStart}}</text>
+
+        <div if="{{hasPrev}}" on:click="onPrevPageClick" class="ui-round-btn"
+          style="left: {{uiSizes.uiWidth - 156}}px;">
+          <image style="width: 44px; height: 44px;" src="/common/chevron_left-44px.png"></image>
+        </div>
+
+        <div if="{{hasNext}}" on:click="onNextPageClick" class="ui-round-btn" style="left: {{uiSizes.uiWidth - 72}}px;">
+          <image style="width: 44px; height: 44px;" src="/common/chevron_right-44px.png"></image>
+        </div>
+
+      </stack>
+    </list-item>
+
+    <!-- files -->
+    <list-item for="{{files}}" class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 91px;">
+
+      <div if="{{!failData}}" on:click="onGoClick({{$item.uri}})" on:longpress="onGoLongpress({{$item.uri}})"
+        class="text-btnCard" style="width: {{uiSizes.uiWidth}}px; height: 79px;">
+
+        <text style="width: {{uiSizes.uiWidth - 48}}px; font-size: 30px; color: {{$item.color}};">{{$item.name}}</text>
+
+      </div>
+
+    </list-item>
+
+    <!-- prev next 2 -->
+    <list-item if="{{hasNext}}" style="width: {{uiSizes.screenWidth}}px; height: 84px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+
+        <div if="{{hasPrev}}" on:click="onPrevPageClick" class="ui-round-btn"
+          style="left: {{uiSizes.uiWidth - 156}}px;">
+          <image style="width: 44px; height: 44px;" src="/common/chevron_left-44px.png"></image>
+        </div>
+
+        <div if="{{hasNext}}" on:click="onNextPageClick" class="ui-round-btn" style="left: {{uiSizes.uiWidth - 72}}px;">
+          <image style="width: 44px; height: 44px;" src="/common/chevron_right-44px.png"></image>
+        </div>
+
+      </stack>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px; background-color: transparent;"></list-item>
+
+  </list>
+</div>

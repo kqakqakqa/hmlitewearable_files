@@ -1,4 +1,4 @@
-console.info("pages/menu/menu onInit");
+console.info("pages/menu_licenses/menu_licenses onInit");
 
 export default {
   data: {
@@ -10,32 +10,20 @@ export default {
       this.timeBatteryStr = $app.getImports().headerTimeBattery.time + "  " + $app.getImports().headerTimeBattery.battery;
     });
   },
-
   onShow() {
     if (this.$refs.bindRotation.rotation) this.$refs.bindRotation.rotation({ focus: true });
   },
-
   onHide() {
     if (this.$refs.bindRotation.rotation) this.$refs.bindRotation.rotation({ focus: false });
   },
 
-  pageTo(p) {
-    $app.getImports().router.replace({
-      uri: "pages/" + p + "/" + p,
-    });
-  },
-
   clickBack() {
     $app.getImports().router.replace({
-      uri: "pages/files_index/files_index",
+      uri: "pages/menu/menu",
     });
   },
 
   swipeBack(d) {
     if (d.direction === "right") return this.clickBack();
-  },
-
-  exitApp() {
-    $app.getImports().app.terminate();
   },
 }

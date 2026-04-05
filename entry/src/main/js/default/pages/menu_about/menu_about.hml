@@ -1,0 +1,31 @@
+<div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="bindRotation" on:swipe="swipeBack"
+    style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+
+    <!-- timeBattery -->
+    <list-item class="timeBatteryWrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px;">
+      <text class="text-30px timeBatteryStr">{{timeBatteryStr}}</text>
+    </list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+        <text class="text-38px title-text">关于</text>
+        <div on:click="clickBack" class="ui-round-btn" style="left: {{uiSizes.uiWidth - 72}}px;">
+          <image style="width: 44px; height: 44px;" src="/common/chevron_left-44px.png"></image>
+        </div>
+      </stack>
+    </list-item>
+
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 250px; flex-direction: column; align-items: center;">
+      <image src="/common/icon.png" style="width: 114px; height: 114px; margin-bottom: 12px;"></image>
+      <text class="text-38px">文件</text>
+      <text class="text-30px">v{{versionName}}</text>
+      <text class="text-30px" style="color: gray;">作者：kqakqakqa</text>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px; background-color: transparent;"></list-item>
+
+  </list>
+</div>

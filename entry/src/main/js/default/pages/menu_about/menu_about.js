@@ -1,10 +1,13 @@
-console.info("pages/menu/menu onInit");
+console.info("pages/menu_about/menu_about onInit");
 
 export default {
   data: {
     uiSizes: $app.getImports().uiSizes,
     timeBatteryStr: "",
+
+    versionName: $app.getImports().app.getInfo().versionName,
   },
+
   onInit() {
     $app.getImports().headerTimeBattery.subscribe(() => {
       this.timeBatteryStr = $app.getImports().headerTimeBattery.time + "  " + $app.getImports().headerTimeBattery.battery;
@@ -19,23 +22,13 @@ export default {
     if (this.$refs.bindRotation.rotation) this.$refs.bindRotation.rotation({ focus: false });
   },
 
-  pageTo(p) {
-    $app.getImports().router.replace({
-      uri: "pages/" + p + "/" + p,
-    });
-  },
-
   clickBack() {
     $app.getImports().router.replace({
-      uri: "pages/files_index/files_index",
+      uri: "pages/menu/menu",
     });
   },
 
   swipeBack(d) {
     if (d.direction === "right") return this.clickBack();
-  },
-
-  exitApp() {
-    $app.getImports().app.terminate();
   },
 }

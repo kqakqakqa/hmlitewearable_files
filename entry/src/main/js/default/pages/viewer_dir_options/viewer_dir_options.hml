@@ -1,0 +1,88 @@
+<stack style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="bindRotation" on:swipe="swipeBack"
+    style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+
+    <!-- timeBattery -->
+    <list-item class="timeBatteryWrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px;">
+      <text class="text-30px timeBatteryStr">{{timeBatteryStr}}</text>
+    </list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+        <text class="text-38px title-text">属性</text>
+        <div on:click="clickBack" class="ui-round-btn" style="left: {{uiSizes.uiWidth - 72}}px;">
+          <image style="width: 44px; height: 44px;" src="/common/chevron_left-44px.png"></image>
+        </div>
+      </stack>
+    </list-item>
+
+    <!-- file name -->
+    <list-item class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 91px;">
+      <div class="text-btnCard" style="width: {{uiSizes.uiWidth}}px; height: 79px;">
+        <text style="width: {{uiSizes.uiWidth - 48}}px; font-size: 30px;">
+          {{fileName}}
+        </text>
+      </div>
+    </list-item>
+
+    <!-- fail data -->
+    <list-item if="{{!!failData}}" class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div class="text-btnCard" style="width: {{uiSizes.uiWidth}}px; background-color: #600;">
+        <text style="width: {{uiSizes.uiWidth - 48}}px; font-size: 30px;">
+          {{failData}}
+        </text>
+      </div>
+    </list-item>
+
+    <!-- info -->
+    <list-item class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 352px;">
+      <div class="text-btnCard"
+        style="width: {{uiSizes.uiWidth}}px; height: 340px; flex-direction: column; align-items: flex-start; justify-content: center;">
+        <text class="text-30px text-btnCard-title">类型</text>
+        <text class="text-30px text-btnCard-title" style="color: gray;">
+          {{fileInfo_type === 'dir' ? '目录' : '文件'}}
+        </text>
+        <text class="text-30px text-btnCard-title" style="margin-top: 12px;">大小</text>
+        <text class="text-30px text-btnCard-title" style="color: gray;">{{fileInfo_length}}</text>
+        <text class="text-30px text-btnCard-title" style="margin-top: 12px;">修改时间</text>
+        <text class="text-30px text-btnCard-title" style="height: 78px; color: gray;">{{fileInfo_time}}</text>
+      </div>
+    </list-item>
+
+    <list-item class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div on:click="onOpenAsTextClick" class="text-btnCard" style="width: {{uiSizes.uiWidth}}px;">
+        <text class="text-30px text-btnCard-title">查看文本</text>
+        <image class="text-btnCard-go-icon" src="/common/chevron_right-30px-gray.png"></image>
+      </div>
+    </list-item>
+
+    <list-item class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div on:click="onOpenAsImgClick" class="text-btnCard" style="width: {{uiSizes.uiWidth}}px;">
+        <text class="text-30px text-btnCard-title">查看图片</text>
+        <image class="text-btnCard-go-icon" src="/common/chevron_right-30px-gray.png"></image>
+      </div>
+    </list-item>
+
+    <list-item class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div on:click="onOpenAsScriptClick" class="text-btnCard" style="width: {{uiSizes.uiWidth}}px;">
+        <text class="text-30px text-btnCard-title">JS模拟器</text>
+        <image class="text-btnCard-go-icon" src="/common/chevron_right-30px-gray.png"></image>
+      </div>
+    </list-item>
+
+    <list-item class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px;">
+      <div on:click="switchFavorite" class="text-btnCard" style="width: {{uiSizes.uiWidth}}px;">
+        <text class="text-30px text-btnCard-title">
+          {{isInFavorite ? "取消收藏" : "收藏"}}
+        </text>
+        <image if="{{isInFavorite}}" class="text-btnCard-go-icon" src="/common/star_fill-30px.png"></image>
+        <image if="{{!isInFavorite}}" class="text-btnCard-go-icon" src="/common/star-30px.png"></image>
+      </div>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px; background-color: transparent;"></list-item>
+
+  </list>
+</stack>

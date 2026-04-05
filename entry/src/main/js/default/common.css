@@ -1,0 +1,111 @@
+/* 单行 ×1.25, 换行 ×1.375 */
+.text-30px {
+  /* 单行 37.5px, 换行 41.25px */
+  height: 38px;
+  font-size: 30px;
+}
+
+.text-38px {
+  /* 单行 47.5px, 换行 52.25px */
+  height: 48px;
+  font-size: 38px;
+}
+
+.ui-btn {
+  /* total height: 61.5px */
+  width: 240px;
+  height: 62px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #222;
+  border-radius: 24px;
+  text-align: center;
+  font-size: 30px;
+}
+
+.ui-round-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 72px;
+  align-items: center;
+  justify-content: center;
+  background-color: #222;
+}
+
+.text-btnCard-wrapper {
+  height: 90px;
+  flex-direction: column;
+  align-items: center;
+  background-color: transparent;
+}
+
+.text-btnCard {
+  /* 汉字高 + 48px */
+  height: 78px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #222;
+  border-radius: 24px;
+}
+
+.text-btnCard-title {
+  margin-left: 24px;
+}
+
+.text-btnCard-go-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 24px;
+}
+
+.timeBatteryWrapper {
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.timeBatteryStr {
+  width: 276px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.title-text {
+  top: 12px;
+}
+
+.option-list {
+  padding-left: 24px;
+  padding-right: 24px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: transparent;
+}
+
+.option-card-wrapper {
+  width: 132px;
+  height: 84px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  border-width: 3px;
+  background-color: transparent;
+}
+
+.option-card {
+  width: 120px;
+  height: 72px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.option-round-btn {
+  width: 72px;
+  height: 72px;
+  margin-left: 12px;
+  border-radius: 72px;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+}

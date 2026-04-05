@@ -1,0 +1,32 @@
+<div style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+  <list ref="bindRotation" on:swipe="swipeBack"
+    style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.screenHeight}}px;">
+
+    <!-- timeBattery -->
+    <list-item class="timeBatteryWrapper"
+      style="width: {{uiSizes.screenWidth}}px; height: {{uiSizes.topMargin + 24}}px;">
+      <text class="text-30px timeBatteryStr">{{timeBatteryStr}}</text>
+    </list-item>
+
+    <!-- title -->
+    <list-item style="width: {{uiSizes.screenWidth}}px; height: 96px; justify-content: center;">
+      <stack style="width: {{uiSizes.uiWidth}}px; height: 72px;">
+        <text class="text-38px title-text">支持作者</text>
+        <div on:click="clickBack" class="ui-round-btn" style="left: {{uiSizes.uiWidth - 72}}px;">
+          <image style="width: 44px; height: 44px;" src="/common/chevron_left-44px.png"></image>
+        </div>
+      </stack>
+    </list-item>
+
+    <list-item class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 132px;">
+      <text class="text-30px" style="height: 120px; text-align: center;">感谢你的支持！\n\(^▽^*)))\n这是我的爱发电：</text>
+    </list-item>
+
+    <list-item class="text-btnCard-wrapper" style="width: {{uiSizes.screenWidth}}px; height: 276px;">
+      <image style="width: 276px; height: 276px;" src="/common/ifdian.png"></image>
+    </list-item>
+
+    <list-item style="width: 0px; height: {{uiSizes.topMargin}}px; background-color: transparent;"></list-item>
+
+  </list>
+</div>

@@ -26,8 +26,19 @@ const _this = {
                 let i = 0;
                 function checkBundleName() {
                   console.info("checkBundleName");
-                  if (i >= list.length) return onDone();
-                  const bundleName = list[i++].uri.split("/").slice(-1)[0];
+
+                  if (i >= list.length) {
+                    console.info("bundleName not found, setting to \"-\"");
+                    _this.bundleName = "-";
+                    $app.getImports().storage.set({
+                      key: "bundleName",
+                      value: "-",
+                      success: onDone,
+                    });
+                    return;
+                  }
+
+                  const bundleName = list[i++].uri.split("/").pop();
                   console.info("bundleName " + i + ": " + bundleName);
                   $app.getImports().file.readText({
                     uri: "internal://app\\../" + bundleName + "/kvstore/bundleNameMarker",

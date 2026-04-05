@@ -1,13 +1,43 @@
+import router from "../../router.js";
+
+// import appName from "../../appName.js";
+import bundleName from "../../bundleName.js";
+// import headerBar from "../../headerBar.js";
+import headerTimeBattery from "../../headerTimeBattery.js";
+import memory from "../../memory.js";
+import uiSizes from "../../uiSizes.js";
+// import lookupDict from "../../lookupDictV4.js";
+
 console.info("pages/index/index onInit");
+
+const imports = {
+  app: requireNative("system.app"),
+  battery: requireNative("system.battery"),
+  brightness: requireNative("system.brightness"),
+  // configuration: requireNative("system.configuration"),
+  device: requireNative("system.device"),
+  // fetch: requireNative("system.fetch"),
+  file: requireNative("system.file"),
+  // geolocation: requireNative("system.geolocation"),
+  router: router, // requireNative("system.router"),
+  // sensor: requireNative("system.sensor"),
+  storage: requireNative("system.storage"),
+  vibrator: requireNative("system.vibrator"),
+
+  // appName: appName,
+  bundleName: bundleName,
+  // headerBar: headerBar,
+  headerTimeBattery: headerTimeBattery,
+  memory: memory,
+  uiSizes: uiSizes,
+  // lookupDict: lookupDict,
+};
 
 export default {
   onInit() {
-    initImports(() => {
-      $app.getImports().router.replace({
-        uri: "pages/viewer-dir/viewer-dir",
-        direct: true,
-      });
-    });
+    $app.setImports(imports);
+
+    initImports(() => router.replace({ uri: "pages/files_index/files_index" }));
   },
 }
 

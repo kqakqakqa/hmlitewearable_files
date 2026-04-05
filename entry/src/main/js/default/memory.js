@@ -7,7 +7,9 @@ const _this = {
 
 const defaults = {
   paths: [],
-  position: 0,
+  pathPos: 0,
+
+  viewDirMode: "dir",
 
   viewTextHistory: [],
 
